@@ -1,0 +1,12 @@
+name: MultipleBedSpawn
+version: '${project.version}'
+main: me.gabrielfj.multiplebedspawn.MultipleBedSpawn
+api-version: 1.19
+load: STARTUP
+authors: [ GabrielFJ ]
+description: A simple plugin to allow players to choose which bed to respawn into.
+website: https://github.com/GabrielFJunkes
+commands:
+  multibed:
+    description: Change the name of the bed you are looking at
+    usage: /<command> "name of the bed"

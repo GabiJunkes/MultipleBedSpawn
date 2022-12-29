@@ -1,0 +1,4 @@
+lang: "enUS"
+max-beds: 5
+disable-sleeping: true
+bed-cooldown: 30
