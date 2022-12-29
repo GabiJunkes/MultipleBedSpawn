@@ -168,7 +168,7 @@ public class MenuHandler implements Listener {
                                 " Y: "+location[1].substring(0, location[1].length() - 2)+
                                 " Z: "+location[2].substring(0, location[2].length() - 2);
                 lore.add(Component.text(locText)
-                        .color(NamedTextColor.DARK_BLUE));
+                        .color(NamedTextColor.GRAY));
 
                 // checks if has any cooldowns
                 if (bed.getBedCooldown()>0L){
