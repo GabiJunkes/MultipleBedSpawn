@@ -5,7 +5,9 @@ A simple Minecraft plugin to allow players to choose which bed to respawn into.
 
 When a player dies, if they have at least one bed, a respawn menu appears so they can choose where to respawn. With which bed displaying the location and cooldown timer if enabled.
 
-A player can set a bed by right clicking it, and rename it with the command ```/multibed 'the name they want'``` while looking at the bed.
+A player can set a bed by right clicking it.
+
+And rename it with the command ```/multibed 'the name they want'``` while looking at the bed.
 
 ![image](https://user-images.githubusercontent.com/69057368/210019366-3a981d52-79a2-4bfd-9217-0aac37918243.png)
 
