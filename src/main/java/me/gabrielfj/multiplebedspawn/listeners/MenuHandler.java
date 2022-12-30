@@ -81,7 +81,7 @@ public class MenuHandler implements Listener {
 
                         long cooldown = data.get(new NamespacedKey(plugin, "cooldown"), PersistentDataType.LONG);
                         String uuid = data.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
-                        List<Component> lore = item_meta.lore();
+                        List<String> lore = item_meta.getLore();
 
                         if (cooldown>System.currentTimeMillis()){
                             hasActiveCooldown = true;
@@ -90,15 +90,11 @@ public class MenuHandler implements Listener {
                             if (lore.size()>1) {
                                 lore.set(
                                         1,
-                                        Component.text(plugin.getMessages("cooldown-text").replace("{1}", seconds))
-                                                .color(NamedTextColor.GOLD)
-                                                .decoration(TextDecoration.BOLD, true)
+                                        ChatColor.GOLD+""+ChatColor.BOLD+plugin.getMessages("cooldown-text").replace("{1}", seconds)
                                 );
                             }else {
                                 lore.add(
-                                        Component.text(plugin.getMessages("cooldown-text").replace("{1}", seconds))
-                                                .color(NamedTextColor.GOLD)
-                                                .decoration(TextDecoration.BOLD, true)
+                                        ChatColor.GOLD+""+ChatColor.BOLD+plugin.getMessages("cooldown-text").replace("{1}", seconds)
                                 );
                             }
                         }else{
@@ -107,7 +103,7 @@ public class MenuHandler implements Listener {
                             }
                         }
 
-                        item_meta.lore(lore);
+                        item_meta.setLore(lore);
                         item.setItemMeta(item_meta);
                     }
                 }
@@ -162,13 +158,12 @@ public class MenuHandler implements Listener {
                 }
                 PersistentDataContainer data = item_meta.getPersistentDataContainer();
 
-                List<Component> lore = new ArrayList<>();
+                List<String> lore = new ArrayList<>();
                 String[] location = bed.getBedCoords().split(":");
                 String locText = "X: "+location[0].substring(0, location[0].length() - 2)+
                                 " Y: "+location[1].substring(0, location[1].length() - 2)+
                                 " Z: "+location[2].substring(0, location[2].length() - 2);
-                lore.add(Component.text(locText)
-                        .color(NamedTextColor.GRAY));
+                lore.add(ChatColor.GRAY+locText);
 
                 // checks if has any cooldowns
                 if (bed.getBedCooldown()>0L){
@@ -186,7 +181,7 @@ public class MenuHandler implements Listener {
                 data.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, uuid);
                 data.set(new NamespacedKey(plugin, "location"), PersistentDataType.STRING, bed.getBedCoords());
 
-                item_meta.lore(lore);
+                item_meta.setLore(lore);
                 item.setItemMeta(item_meta);
                 gui.addItem(item);
                 cont.getAndIncrement();
@@ -202,10 +197,10 @@ public class MenuHandler implements Listener {
             item.setItemMeta(item_meta);
             gui.setItem(9 * ( (int) Math.ceil( bedCount / (Double) 9.0 )) -1, item);
 
-
+            // I dont know why but if openInventory is not on a scheduler is does not open
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 p.openInventory(gui);
-            }, 1L);
+            }, 0L);
 
         }else{
 

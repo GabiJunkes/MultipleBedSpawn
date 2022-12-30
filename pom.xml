@@ -6,7 +6,7 @@
 
     <groupId>me.gabrielfj</groupId>
     <artifactId>MultipleBedSpawn</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>MultipleBedSpawn</name>
@@ -44,14 +44,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
-                <configuration>
-                    <outputDirectory>/home/gabriel/Documents/paper/plugins</outputDirectory>
-                </configuration>
             </plugin>
         </plugins>
         <resources>
