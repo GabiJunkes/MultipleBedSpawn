@@ -288,9 +288,6 @@ public class MenuHandler implements Listener {
         if (p.getWalkSpeed()==0.0){
             p.setWalkSpeed(0.2F);
         }
-        if (plugin.getMessages("respawn-message")!=null && plugin.getMessages("respawn-message").length()>0){
-            p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("respawn-message")));
-        }
         p.closeInventory();
 
     }
