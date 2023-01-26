@@ -13,7 +13,7 @@ And rename it with the command ```/multibed 'the name they want'``` while lookin
 
 # Configuration
 
-The plugin has 4 options
+The plugin has 6 options
 
 <strong>lang</strong> - Chooses the language of the plugin, at the moment we have 2, English (enUS) and Portuguese (ptBR), but you can view all the supported languages at the folder ```src/main/resources/language``` inside this repo.
 
@@ -22,6 +22,14 @@ The plugin has 4 options
 <strong>disable-sleeping</strong> - If players can sleep or not (if set to true, player will not be able to lie in bed).
 
 <strong>bed-cooldown</strong> - The amount of time, in seconds, players have to wait before respawning in the same bed.
+
+You can select which worlds the plugin will run. Choosing between allowlist or denylist (you can use both, but it does not make sense).
+Leave empty to work in every world.
+
+<strong>denylist</strong> - List of world where the plugin will not work.
+
+<strong>allowlist</strong> - List of world where the plugin will not work.
+
 
 # Help needed
 
