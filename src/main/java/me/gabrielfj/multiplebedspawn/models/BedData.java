@@ -13,12 +13,14 @@ public class BedData implements Serializable {
     private Material bedMaterial;
     private String bedCoords;
     private String bedSpawnCoords;
+    private String bedWorld;
     private long bedCooldown = 0;
 
     public BedData(Block bed, Player p){
         this.bedMaterial = bed.getType();
         this.bedCoords = locationToString(bed.getLocation());
         this.bedSpawnCoords = locationToString(p.getLocation());
+        this.bedWorld = bed.getWorld().getName();
     }
 
     public String getBedName() {
@@ -43,6 +45,14 @@ public class BedData implements Serializable {
 
     public String getBedSpawnCoords() {
         return bedSpawnCoords;
+    }
+
+    public String getBedWorld() {
+        return bedWorld;
+    }
+
+    public void setBedWorld(String bedWorld) {
+        this.bedWorld = bedWorld;
     }
 
     public long getBedCooldown(){
