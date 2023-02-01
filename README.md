@@ -30,6 +30,9 @@ Leave empty to work in every world.
 
 <strong>allowlist</strong> - List of world where the plugin will not work.
 
+<strong>link-worlds</strong> - If true, players can choose beds from all worlds.
+<br>If false, players can only choose beds from the current world.
+
 
 # Help needed
 
