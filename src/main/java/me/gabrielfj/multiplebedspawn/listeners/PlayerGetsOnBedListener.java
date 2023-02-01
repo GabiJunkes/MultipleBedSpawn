@@ -48,14 +48,17 @@ public class PlayerGetsOnBedListener implements Listener {
                 playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
                 if (playerBedsData != null && playerBedsData.getPlayerBedData() != null) {
                     HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
-                    HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
-                    beds.forEach((uuid, bedData) -> {
-                        // clear lists so beds are only from the world that player is in
-                        if (!bedData.getBedWorld().equalsIgnoreCase(player.getWorld().getName())){
-                            bedsT.remove(uuid);
-                        }
-                    });
-                    playerBedsCount = bedsT.size();
+                    if (!plugin.getConfig().getBoolean("link-worlds")) {
+                        HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
+                        beds.forEach((uuid, bedData) -> {
+                            // clear lists so beds are only from the world that player is in
+                            if (!bedData.getBedWorld().equalsIgnoreCase(player.getWorld().getName())) {
+                                bedsT.remove(uuid);
+                            }
+                        });
+                        beds = bedsT;
+                    }
+                    playerBedsCount = beds.size();
                 }
             }
 

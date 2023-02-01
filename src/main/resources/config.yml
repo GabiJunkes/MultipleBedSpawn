@@ -4,3 +4,4 @@ disable-sleeping: true
 bed-cooldown: 30
 denylist: []
 allowlist: []
+link-worlds: true

@@ -87,9 +87,9 @@ public class MenuHandler implements Listener {
                             hasActiveCooldown = true;
                             long sec = ( cooldown - System.currentTimeMillis() ) / 1000;
                             String seconds = Long.toString(sec);
-                            if (lore.size()>1) {
+                            if (lore.size()>2) {
                                 lore.set(
-                                        1,
+                                        2,
                                         ChatColor.GOLD+""+ChatColor.BOLD+plugin.getMessages("cooldown-text").replace("{1}", seconds)
                                 );
                             }else {
@@ -98,8 +98,8 @@ public class MenuHandler implements Listener {
                                 );
                             }
                         }else{
-                            if (lore.size()>1) {
-                                lore.remove(1);
+                            if (lore.size()>2) {
+                                lore.remove(2);
                             }
                         }
 
@@ -127,14 +127,17 @@ public class MenuHandler implements Listener {
             playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
             if (playerBedsData != null && playerBedsData.getPlayerBedData() != null) {
                 HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
-                HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
-                beds.forEach((uuid, bed) -> {
-                    // clear lists so beds are only from the world that player is in
-                    if (!bed.getBedWorld().equalsIgnoreCase(p.getWorld().getName())){
-                        bedsT.remove(uuid);
-                    }
-                });
-                playerBedsCount = bedsT.size();
+                if (!plugin.getConfig().getBoolean("link-worlds")) {
+                    HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
+                    beds.forEach((uuid, bed) -> {
+                        // clear lists so beds are only from the world that player is in
+                        if (!bed.getBedWorld().equalsIgnoreCase(p.getWorld().getName())) {
+                            bedsT.remove(uuid);
+                        }
+                    });
+                    beds = bedsT;
+                }
+                playerBedsCount = beds.size();
             }
         }
 
@@ -154,14 +157,16 @@ public class MenuHandler implements Listener {
             Inventory gui = Bukkit.createInventory(p, 9 * ( (int) Math.ceil( bedCount / (Double) 9.0 ) ), ChatColor.translateAlternateColorCodes('&', plugin.getMessages("menu-title")));
 
             HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
-            HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
-            beds.forEach((uuid, bed) -> {
-                // clear lists so beds are only from the world that player is in
-                if (!bed.getBedWorld().equalsIgnoreCase(p.getWorld().getName())){
-                    bedsT.remove(uuid);
-                }
-            });
-            beds = bedsT;
+            if (!plugin.getConfig().getBoolean("link-worlds")) {
+                HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
+                beds.forEach((uuid, bed) -> {
+                    // clear lists so beds are only from the world that player is in
+                    if (!bed.getBedWorld().equalsIgnoreCase(p.getWorld().getName())) {
+                        bedsT.remove(uuid);
+                    }
+                });
+                beds = bedsT;
+            }
             AtomicBoolean hasCooldown = new AtomicBoolean(false);
             AtomicInteger cont= new AtomicInteger(1);
             beds.forEach((uuid, bed) -> {
@@ -175,6 +180,7 @@ public class MenuHandler implements Listener {
                 PersistentDataContainer data = item_meta.getPersistentDataContainer();
 
                 List<String> lore = new ArrayList<>();
+                lore.add(ChatColor.DARK_PURPLE+bed.getBedWorld().toUpperCase());
                 String[] location = bed.getBedCoords().split(":");
                 String locText = "X: "+location[0].substring(0, location[0].length() - 2)+
                                 " Y: "+location[1].substring(0, location[1].length() - 2)+
@@ -196,6 +202,7 @@ public class MenuHandler implements Listener {
 
                 data.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, uuid);
                 data.set(new NamespacedKey(plugin, "location"), PersistentDataType.STRING, bed.getBedCoords());
+                data.set(new NamespacedKey(plugin, "world"), PersistentDataType.STRING, bed.getBedWorld());
 
                 item_meta.setLore(lore);
                 item.setItemMeta(item_meta);
@@ -226,8 +233,8 @@ public class MenuHandler implements Listener {
 
     }
 
-    public boolean checksIfBedExists(Location locBed, Player p, String bedUUID){
-        World world = p.getWorld();
+    public boolean checksIfBedExists(Location locBed, Player p, String bedUUID, String worldString){
+        World world = Bukkit.getWorld(worldString);
         Block bed = world.getBlockAt(locBed);
         boolean isBed = false;
         if (bed.getBlockData() instanceof Bed bedPart){
@@ -277,17 +284,19 @@ public class MenuHandler implements Listener {
                 playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
                 if (playerBedsData != null && playerBedsData.getPlayerBedData() != null) {
                     beds = playerBedsData.getPlayerBedData();
-                    HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
-                    beds.forEach((uuid, bed) -> {
-                        if (!bed.getBedWorld().equalsIgnoreCase(world)){
-                            bedsT.remove(uuid);
-                        }
-                    });
-                    beds = bedsT;
+                    if (!plugin.getConfig().getBoolean("link-worlds")) {
+                        HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
+                        beds.forEach((uuid, bed) -> {
+                            if (!bed.getBedWorld().equalsIgnoreCase(world)) {
+                                bedsT.remove(uuid);
+                            }
+                        });
+                        beds = bedsT;
+                    }
                     beds.forEach((uuid, bed) -> { // loops all beds to check if they still exist
                         String loc[] = bed.getBedCoords().split(":");
                         Location locBed = new Location(Bukkit.getWorld(bed.getBedWorld()), Double.parseDouble(loc[0]), Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
-                        checksIfBedExists(locBed, p, uuid);
+                        checksIfBedExists(locBed, p, uuid, bed.getBedWorld());
                     });
 
                 }
@@ -330,7 +339,8 @@ public class MenuHandler implements Listener {
             HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
             setPropPlayer(p);
             String loc[] = beds.get(uuid).getBedSpawnCoords().split(":");
-            Location locSpawn = new Location(p.getWorld(), Double.parseDouble(loc[0]), Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
+            World world = Bukkit.getWorld(beds.get(uuid).getBedWorld());
+            Location locSpawn = new Location(world, Double.parseDouble(loc[0]), Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
             beds.get(uuid).setBedCooldown( System.currentTimeMillis() + (plugin.getConfig().getLong("bed-cooldown") * 1000) );
             playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
             p.teleport(locSpawn);
@@ -361,10 +371,11 @@ public class MenuHandler implements Listener {
                     PersistentDataContainer data = item_meta.getPersistentDataContainer();
 
                     String bedCoord[] = data.get(new NamespacedKey(plugin, "location"), PersistentDataType.STRING).split(":");
+                    String world = data.get(new NamespacedKey(plugin, "world"), PersistentDataType.STRING);
                     Location location = new Location(p.getWorld(), Double.parseDouble(bedCoord[0]), Double.parseDouble(bedCoord[1]), Double.parseDouble(bedCoord[2]));
                     String uuid = data.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
 
-                    if (checksIfBedExists(location , p, uuid)){
+                    if (checksIfBedExists(location , p, uuid, world)){
 
                         teleportPlayer(p, data, playerData, playerBedsData, uuid);
 
