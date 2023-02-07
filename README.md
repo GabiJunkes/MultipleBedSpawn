@@ -7,7 +7,7 @@ When a player dies, if they have at least one bed, a respawn menu appears so the
 
 A player can set a bed by right clicking it.
 
-And rename it with the command ```/multibed 'the name they want'``` while looking at the bed.
+And rename it with the command ```/renamebed 'the name they want'``` while looking at the bed.
 
 ![image](https://user-images.githubusercontent.com/69057368/210019366-3a981d52-79a2-4bfd-9217-0aac37918243.png)
 
