@@ -5,3 +5,4 @@ bed-cooldown: 30
 denylist: []
 allowlist: []
 link-worlds: true
+remove-beds-gui: false

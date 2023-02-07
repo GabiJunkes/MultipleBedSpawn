@@ -4,20 +4,12 @@ import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
 import me.gabrielfj.multiplebedspawn.models.BedData;
 import me.gabrielfj.multiplebedspawn.models.BedsDataType;
 import me.gabrielfj.multiplebedspawn.models.PlayerBedsData;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.TileState;
-import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,44 +19,22 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MenuHandler implements Listener {
+import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.checksIfBedExists;
+import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.setPropPlayer;
+import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.teleportPlayer;
+
+public class RespawnMenuHandler implements Listener {
 
     static MultipleBedSpawn plugin;
 
-    public MenuHandler(MultipleBedSpawn plugin) {
+    public RespawnMenuHandler(MultipleBedSpawn plugin) {
         this.plugin = plugin;
     }
 
-    public void removePlayerBed(String bedUUID, String uuid){
-
-        Player p = Bukkit.getPlayer(UUID.fromString(uuid));
-
-        // checks if player object exists
-        if (p != null) {
-
-            PersistentDataContainer playerData = p.getPersistentDataContainer();
-            // checks to see if player has beds
-            if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
-                PlayerBedsData playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
-                HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
-                if (beds.containsKey(bedUUID)){
-                    playerBedsData.removeBed(bedUUID);
-                    if (beds==null){
-                        playerData.remove(new NamespacedKey(plugin, "beds"));
-                    }else{
-                        playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
-                    }
-                }
-            }
-
-        }
-    }
-
-    public void updateItens(Inventory gui, Player p){
+    public static void updateItens(Inventory gui, Player p){
 
         if (gui.getViewers().toString().length()>2){
 
@@ -117,7 +87,7 @@ public class MenuHandler implements Listener {
 
     }
 
-    public void openMenu(Player p){
+    public static void openRespawnMenu(Player p){
 
         // gets how much beds player has to use on for loop and for the if check
         PersistentDataContainer playerData = p.getPersistentDataContainer();
@@ -233,120 +203,6 @@ public class MenuHandler implements Listener {
 
     }
 
-    public boolean checksIfBedExists(Location locBed, Player p, String bedUUID, String worldString){
-        World world = Bukkit.getWorld(worldString);
-        Block bed = world.getBlockAt(locBed);
-        boolean isBed = false;
-        if (bed.getBlockData() instanceof Bed bedPart){
-            // since the data is in the head we need to set the Block bed to its head
-            if (bedPart.getPart().toString()=="FOOT"){
-                bed = (Block) bed.getRelative(bedPart.getFacing());
-            }
-            isBed = true;
-        }
-
-        if (!isBed){
-
-            removePlayerBed(bedUUID, p.getUniqueId().toString());
-            return false;
-
-        }else{
-
-            BlockState blockState = bed.getState();
-            if (blockState instanceof TileState tileState){
-                PersistentDataContainer container = tileState.getPersistentDataContainer();
-
-                if (!container.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING).equalsIgnoreCase(bedUUID)){
-                    removePlayerBed(bedUUID, p.getUniqueId().toString());
-                    return false;
-                }
-
-            }
-
-        }
-
-        return true;
-    }
-
-    @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent e){
-
-        Player p = e.getPlayer();
-        String world = p.getWorld().getName();
-        List<String> denylist = plugin.getConfig().getStringList("denylist");
-        List<String> allowlist = plugin.getConfig().getStringList("allowlist");
-        boolean passLists = (!denylist.contains(world)) && (allowlist.contains(world) || allowlist.isEmpty());
-        if (passLists) {
-            PersistentDataContainer playerData = p.getPersistentDataContainer();
-            PlayerBedsData playerBedsData;
-            HashMap<String, BedData> beds;
-            if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
-                playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
-                if (playerBedsData != null && playerBedsData.getPlayerBedData() != null) {
-                    beds = playerBedsData.getPlayerBedData();
-                    if (!plugin.getConfig().getBoolean("link-worlds")) {
-                        HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
-                        beds.forEach((uuid, bed) -> {
-                            if (!bed.getBedWorld().equalsIgnoreCase(world)) {
-                                bedsT.remove(uuid);
-                            }
-                        });
-                        beds = bedsT;
-                    }
-                    beds.forEach((uuid, bed) -> { // loops all beds to check if they still exist
-                        String loc[] = bed.getBedCoords().split(":");
-                        Location locBed = new Location(Bukkit.getWorld(bed.getBedWorld()), Double.parseDouble(loc[0]), Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
-                        checksIfBedExists(locBed, p, uuid, bed.getBedWorld());
-                    });
-
-                }
-            }
-            openMenu(p);
-        }
-    }
-
-    public void setPropPlayer(Player p){
-
-        p.setInvisible(false);
-        p.setInvulnerable(false);
-        p.setCanPickupItems(true);
-        if (p.getPersistentDataContainer().has(new NamespacedKey(plugin, "lastWalkspeed"), PersistentDataType.FLOAT)){
-            p.setWalkSpeed(p.getPersistentDataContainer().get(new NamespacedKey(plugin, "lastWalkspeed"), PersistentDataType.FLOAT));
-            p.getPersistentDataContainer().remove(new NamespacedKey(plugin, "lastWalkspeed"));
-        }else {
-            p.setWalkSpeed(0.2F);
-        }
-        if (p.getWalkSpeed()==0.0){
-            p.setWalkSpeed(0.2F);
-        }
-        p.closeInventory();
-
-    }
-
-    public void teleportPlayer(Player p, PersistentDataContainer data, PersistentDataContainer playerData, PlayerBedsData playerBedsData, String uuid){
-        boolean isOkayToTP = true;
-
-        if (data.has(new NamespacedKey(plugin, "cooldown"), PersistentDataType.LONG) && data.has(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING)){
-
-            long cooldown = data.get(new NamespacedKey(plugin, "cooldown"), PersistentDataType.LONG);
-            if (cooldown>System.currentTimeMillis()){
-                isOkayToTP = false;
-            }
-
-        }
-
-        if (isOkayToTP) {
-            HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
-            setPropPlayer(p);
-            String loc[] = beds.get(uuid).getBedSpawnCoords().split(":");
-            World world = Bukkit.getWorld(beds.get(uuid).getBedWorld());
-            Location locSpawn = new Location(world, Double.parseDouble(loc[0]), Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
-            beds.get(uuid).setBedCooldown( System.currentTimeMillis() + (plugin.getConfig().getLong("bed-cooldown") * 1000) );
-            playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
-            p.teleport(locSpawn);
-        }
-    }
-
     @EventHandler
     public void onMenuClick(InventoryClickEvent e){
 
@@ -380,7 +236,9 @@ public class MenuHandler implements Listener {
                         teleportPlayer(p, data, playerData, playerBedsData, uuid);
 
                     }else{
-                        p.closeInventory();
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            p.closeInventory();
+                        }, 0L);
                     }
 
 
@@ -400,7 +258,7 @@ public class MenuHandler implements Listener {
 
             Player p = (Player) e.getPlayer();
             if (!p.getCanPickupItems()){
-                openMenu(p);
+                openRespawnMenu(p);
             }
 
         }

@@ -33,6 +33,9 @@ Leave empty to work in every world.
 <strong>link-worlds</strong> - If true, players can choose beds from all worlds.
 <br>If false, players can only choose beds from the current world.
 
+<strong>remove-beds-gui</strong> - If true, enables the command ```/removebed``` that opens a gui so the player can remove registered beds.  
+<br>If false, the command does nothing and player can only remove registered beds breaking them.
+
 
 # Help needed
 
