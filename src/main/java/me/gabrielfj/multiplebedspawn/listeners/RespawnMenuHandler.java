@@ -53,13 +53,23 @@ public class RespawnMenuHandler implements Listener {
                         String uuid = data.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
                         List<String> lore = item_meta.getLore();
 
+                        int optionsCount = 2;
+                        if (plugin.getConfig().getBoolean("disable-bed-world-desc")) {
+                            optionsCount--;
+                        }
+                        if (plugin.getConfig().getBoolean("disable-bed-coords-desc")) {
+                            optionsCount--;
+                        }
                         if (cooldown>System.currentTimeMillis()){
                             hasActiveCooldown = true;
                             long sec = ( cooldown - System.currentTimeMillis() ) / 1000;
                             String seconds = Long.toString(sec);
-                            if (lore.size()>2) {
+                            if (lore == null){
+                                lore = new ArrayList<>();
+                            }
+                            if (lore.size()>optionsCount) {
                                 lore.set(
-                                        2,
+                                        optionsCount,
                                         ChatColor.GOLD+""+ChatColor.BOLD+plugin.getMessages("cooldown-text").replace("{1}", seconds)
                                 );
                             }else {
@@ -68,8 +78,8 @@ public class RespawnMenuHandler implements Listener {
                                 );
                             }
                         }else{
-                            if (lore.size()>2) {
-                                lore.remove(2);
+                            if (lore.size()>optionsCount) {
+                                lore.remove(optionsCount);
                             }
                         }
 
@@ -150,13 +160,16 @@ public class RespawnMenuHandler implements Listener {
                 PersistentDataContainer data = item_meta.getPersistentDataContainer();
 
                 List<String> lore = new ArrayList<>();
-                lore.add(ChatColor.DARK_PURPLE+bed.getBedWorld().toUpperCase());
-                String[] location = bed.getBedCoords().split(":");
-                String locText = "X: "+location[0].substring(0, location[0].length() - 2)+
-                                " Y: "+location[1].substring(0, location[1].length() - 2)+
-                                " Z: "+location[2].substring(0, location[2].length() - 2);
-                lore.add(ChatColor.GRAY+locText);
-
+                if (!plugin.getConfig().getBoolean("disable-bed-world-desc")) {
+                    lore.add(ChatColor.DARK_PURPLE + bed.getBedWorld().toUpperCase());
+                }
+                if (!plugin.getConfig().getBoolean("disable-bed-coords-desc")) {
+                    String[] location = bed.getBedCoords().split(":");
+                    String locText = "X: " + location[0].substring(0, location[0].length() - 2) +
+                            " Y: " + location[1].substring(0, location[1].length() - 2) +
+                            " Z: " + location[2].substring(0, location[2].length() - 2);
+                    lore.add(ChatColor.GRAY + locText);
+                }
                 // checks if has any cooldowns
                 if (bed.getBedCooldown()>0L){
 

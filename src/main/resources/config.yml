@@ -6,3 +6,5 @@ denylist: []
 allowlist: []
 link-worlds: true
 remove-beds-gui: false
+disable-bed-world-desc: true
+disable-bed-coords-desc: true
