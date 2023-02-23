@@ -83,12 +83,16 @@ public class RemoveMenuHandler implements Listener {
                 PersistentDataContainer data = item_meta.getPersistentDataContainer();
 
                 List<String> lore = new ArrayList<>();
-                lore.add(ChatColor.DARK_PURPLE+bed.getBedWorld().toUpperCase());
-                String[] location = bed.getBedCoords().split(":");
-                String locText = "X: "+location[0].substring(0, location[0].length() - 2)+
-                        " Y: "+location[1].substring(0, location[1].length() - 2)+
-                        " Z: "+location[2].substring(0, location[2].length() - 2);
-                lore.add(ChatColor.GRAY+locText);
+                if (!plugin.getConfig().getBoolean("disable-bed-world-desc")) {
+                    lore.add(ChatColor.DARK_PURPLE + bed.getBedWorld().toUpperCase());
+                }
+                if (!plugin.getConfig().getBoolean("disable-bed-coords-desc")) {
+                    String[] location = bed.getBedCoords().split(":");
+                    String locText = "X: " + location[0].substring(0, location[0].length() - 2) +
+                            " Y: " + location[1].substring(0, location[1].length() - 2) +
+                            " Z: " + location[2].substring(0, location[2].length() - 2);
+                    lore.add(ChatColor.GRAY + locText);
+                }
 
                 data.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, uuid);
                 data.set(new NamespacedKey(plugin, "location"), PersistentDataType.STRING, bed.getBedCoords());
@@ -169,12 +173,16 @@ public class RemoveMenuHandler implements Listener {
                     PersistentDataContainer data = item_meta.getPersistentDataContainer();
 
                     List<String> lore = new ArrayList<>();
-                    lore.add(ChatColor.DARK_PURPLE + bed.getBedWorld().toUpperCase());
-                    String[] location = bed.getBedCoords().split(":");
-                    String locText = "X: " + location[0].substring(0, location[0].length() - 2) +
-                            " Y: " + location[1].substring(0, location[1].length() - 2) +
-                            " Z: " + location[2].substring(0, location[2].length() - 2);
-                    lore.add(ChatColor.GRAY + locText);
+                    if (!plugin.getConfig().getBoolean("disable-bed-world-desc")) {
+                        lore.add(ChatColor.DARK_PURPLE + bed.getBedWorld().toUpperCase());
+                    }
+                    if (!plugin.getConfig().getBoolean("disable-bed-coords-desc")) {
+                        String[] location = bed.getBedCoords().split(":");
+                        String locText = "X: " + location[0].substring(0, location[0].length() - 2) +
+                                " Y: " + location[1].substring(0, location[1].length() - 2) +
+                                " Z: " + location[2].substring(0, location[2].length() - 2);
+                        lore.add(ChatColor.GRAY + locText);
+                    }
 
                     data.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, uuid);
                     data.set(new NamespacedKey(plugin, "location"), PersistentDataType.STRING, bed.getBedCoords());
