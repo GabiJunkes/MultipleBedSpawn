@@ -13,7 +13,7 @@ And rename it with the command ```/renamebed 'the name they want'``` while looki
 
 # Configuration
 
-The plugin has 8 options
+The plugin has a lot of options
 
 <strong>lang</strong> - Chooses the language of the plugin, at the moment we have 4, English (enUS), Portuguese (ptBR), German (deDe) and Russian (ruRu), but you can view all the supported languages at the folder ```src/main/resources/language``` inside this repo.
 
