@@ -15,7 +15,7 @@ And rename it with the command ```/renamebed 'the name they want'``` while looki
 
 The plugin has 8 options
 
-<strong>lang</strong> - Chooses the language of the plugin, at the moment we have 3, English (enUS), Portuguese (ptBR) and German (deDe), but you can view all the supported languages at the folder ```src/main/resources/language``` inside this repo.
+<strong>lang</strong> - Chooses the language of the plugin, at the moment we have 4, English (enUS), Portuguese (ptBR), German (deDe) and Russian (ruRu), but you can view all the supported languages at the folder ```src/main/resources/language``` inside this repo.
 
 <strong>max-beds</strong> - The maximum number of beds a player can have.
 
@@ -36,6 +36,9 @@ Leave empty to work in every world.
 <strong>remove-beds-gui</strong> - If true, enables the command ```/removebed``` that opens a gui so the player can remove registered beds.  
 <br>If false, the command does nothing and player can only remove registered beds breaking them.
 
+<strong>disable-bed-world-desc</strong> - If true, the bed item inside the respawn menu and remove menu will not show the bed's world.
+
+<strong>disable-bed-coords-desc</strong> - If true, the bed item inside the respawn menu and remove menu will not show the bed's coordinates.
 
 # Help needed
 
