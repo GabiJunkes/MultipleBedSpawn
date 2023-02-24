@@ -67,8 +67,9 @@ public class BedsUtils{
             BlockState blockState = bed.getState();
             if (blockState instanceof TileState tileState){
                 PersistentDataContainer container = tileState.getPersistentDataContainer();
+                String uuid = container.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
 
-                if (!container.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING).equalsIgnoreCase(bedUUID)){
+                if (container==null || uuid==null || !uuid.equalsIgnoreCase(bedUUID)){
                     removePlayerBed(bedUUID, p.getUniqueId().toString());
                     return false;
                 }
