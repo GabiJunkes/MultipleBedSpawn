@@ -31,6 +31,7 @@ public final class MultipleBedSpawn extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new RemoveMenuHandler(this), this);
         getServer().getPluginManager().registerEvents(new PlayerGetsOnBedListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerRespawnListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         getCommand("renamebed").setExecutor(new NameCommand(this));
         getCommand("removebed").setExecutor(new RemoveCommand(this));
     }
