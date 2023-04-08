@@ -84,7 +84,9 @@ public class PlayerUtils {
             String loc[] = beds.get(uuid).getBedSpawnCoords().split(":");
             World world = Bukkit.getWorld(beds.get(uuid).getBedWorld());
             Location locSpawn = new Location(world, Double.parseDouble(loc[0]), Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
-            beds.get(uuid).setBedCooldown( System.currentTimeMillis() + (plugin.getConfig().getLong("bed-cooldown") * 1000) );
+            if (!p.hasPermission("multiplebedspawn.skipcooldown")) {
+                beds.get(uuid).setBedCooldown(System.currentTimeMillis() + (plugin.getConfig().getLong("bed-cooldown") * 1000));
+            }
             playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
             p.teleport(locSpawn);
         }
