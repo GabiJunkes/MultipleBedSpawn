@@ -33,8 +33,6 @@ public class PlayerUtils {
             if (plugin.getConfig().getBoolean("spawn-on-sky")) {
                 int playerAllowFly = (p.getAllowFlight()) ? 1 : 0;
                 playerData.set(new NamespacedKey(plugin, "allowFly"), PersistentDataType.INTEGER, playerAllowFly);
-                p.sendMessage(String.valueOf(playerAllowFly));
-                p.sendMessage(String.valueOf(playerData.get(new NamespacedKey(plugin, "allowFly"), PersistentDataType.INTEGER)));
                 p.setAllowFlight(true);
                 p.setFlying(true);
             }
