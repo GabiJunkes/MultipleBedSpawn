@@ -42,6 +42,12 @@ Leave empty to work in every world.
 
 <strong>disable-bed-coords-desc</strong> - If true, the bed item inside the respawn menu and remove menu will not show the bed's coordinates.
 
+<strong>spawn-on-sky</strong> - If true, players will spawn flying in the sky.
+
+# Permission
+
+<strong>multiplebedspawn.skipcooldown</strong> - Allow player to skip bed cool-down.
+
 # Help needed
 
 <strong>Translation:</strong> To help with translating this plugin you will have to:
