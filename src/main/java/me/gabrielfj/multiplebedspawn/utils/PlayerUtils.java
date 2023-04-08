@@ -26,18 +26,21 @@ public class PlayerUtils {
     public static void setPropPlayer(Player p){
 
         PersistentDataContainer playerData = p.getPersistentDataContainer();
-        p.setInvulnerable(true);
-        p.setInvisible(true);
-        p.setCanPickupItems(false);
-        if (plugin.getConfig().getBoolean("spawn-on-sky")) {
-            int playerAllowFly = (p.getAllowFlight()) ? 1 : 0;
-            playerData.set(new NamespacedKey(plugin, "allowFly"), PersistentDataType.INTEGER, playerAllowFly);
-            p.setAllowFlight(true);
-            p.setFlying(true);
+        if (!playerData.has(new NamespacedKey(plugin, "lastWalkspeed"), PersistentDataType.FLOAT)) {
+            p.setInvulnerable(true);
+            p.setInvisible(true);
+            p.setCanPickupItems(false);
+            if (plugin.getConfig().getBoolean("spawn-on-sky")) {
+                int playerAllowFly = (p.getAllowFlight()) ? 1 : 0;
+                playerData.set(new NamespacedKey(plugin, "allowFly"), PersistentDataType.INTEGER, playerAllowFly);
+                p.sendMessage(String.valueOf(playerAllowFly));
+                p.sendMessage(String.valueOf(playerData.get(new NamespacedKey(plugin, "allowFly"), PersistentDataType.INTEGER)));
+                p.setAllowFlight(true);
+                p.setFlying(true);
+            }
+            playerData.set(new NamespacedKey(plugin, "lastWalkspeed"), PersistentDataType.FLOAT, p.getWalkSpeed());
+            p.setWalkSpeed(0);
         }
-        playerData.set(new NamespacedKey(plugin, "lastWalkspeed"), PersistentDataType.FLOAT, p.getWalkSpeed());
-        p.setWalkSpeed(0);
-
     }
 
     public static void undoPropPlayer(Player p){
@@ -57,9 +60,11 @@ public class PlayerUtils {
         }
 
         if (plugin.getConfig().getBoolean("spawn-on-sky")) {
-            boolean playerAllowFly = (playerData.get(new NamespacedKey(plugin, "allowFly"), PersistentDataType.INTEGER) == 1) ? true : false;
-            playerData.remove(new NamespacedKey(plugin, "allowFly"));
-            p.setAllowFlight(playerAllowFly);
+            if (playerData.has(new NamespacedKey(plugin, "allowFly"), PersistentDataType.INTEGER)){
+                boolean playerAllowFly = (playerData.get(new NamespacedKey(plugin, "allowFly"), PersistentDataType.INTEGER) == 1) ? true : false;
+                p.setAllowFlight(playerAllowFly);
+                playerData.remove(new NamespacedKey(plugin, "allowFly"));
+            }
             p.setFlying(false);
         }
         p.closeInventory();
