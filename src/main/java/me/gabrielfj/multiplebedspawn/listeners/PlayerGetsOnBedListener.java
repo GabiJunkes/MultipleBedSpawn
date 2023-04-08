@@ -42,6 +42,9 @@ public class PlayerGetsOnBedListener implements Listener {
             PersistentDataContainer playerData = player.getPersistentDataContainer();
 
             int maxBeds = plugin.getConfig().getInt("max-beds");
+            if (maxBeds>53) {
+                maxBeds = 53;
+            }
             int playerBedsCount = 0;
             PlayerBedsData playerBedsData = null;
             if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
