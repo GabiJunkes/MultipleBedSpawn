@@ -23,8 +23,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.checksIfBedExists;
-import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.setPropPlayer;
-import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.teleportPlayer;
+import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.*;
+import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.undoPropPlayer;
 
 public class RespawnMenuHandler implements Listener {
 
@@ -125,12 +125,7 @@ public class RespawnMenuHandler implements Listener {
         if (playerBedsCount>0){
 
             // sets stuff to player be invul and invis on spawn
-            p.setInvulnerable(true);
-            p.setInvisible(true);
-            p.setCanPickupItems(false);
-            p.getPersistentDataContainer().set(new NamespacedKey(plugin, "lastWalkspeed"), PersistentDataType.FLOAT, p.getWalkSpeed());
-            p.setWalkSpeed(0);
-
+            setPropPlayer(p);
 
             // create inventory
             int bedCount = playerBedsCount+1;
@@ -210,7 +205,7 @@ public class RespawnMenuHandler implements Listener {
 
         }else{
 
-            setPropPlayer(p);
+            undoPropPlayer(p);
 
         }
 
@@ -256,7 +251,15 @@ public class RespawnMenuHandler implements Listener {
 
 
                 }else if(index==9 * ( (int) Math.ceil( bedCount / (Double) 9.0 ) )-1){
-                    setPropPlayer(p);
+                    if (plugin.getConfig().getBoolean("spawn-on-sky") && playerData.has(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING)) {
+                        String spawnCoords[] = playerData.get(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING).split(":");
+                        Location location = new Location(p.getWorld(), Double.parseDouble(spawnCoords[0]), Double.parseDouble(spawnCoords[1]), Double.parseDouble(spawnCoords[2]));
+                        playerData.remove(new NamespacedKey(plugin, "spawnLoc"));
+                        undoPropPlayer(p);
+                        p.teleport(location);
+                    }else{
+                        undoPropPlayer(p);
+                    }
                 }
             }
 

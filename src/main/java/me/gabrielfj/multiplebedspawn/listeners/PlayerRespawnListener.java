@@ -12,12 +12,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 import java.util.List;
 
 import static me.gabrielfj.multiplebedspawn.listeners.RespawnMenuHandler.openRespawnMenu;
 import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.checksIfBedExists;
+import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.locationToString;
 
 public class PlayerRespawnListener implements Listener {
     static MultipleBedSpawn plugin;
@@ -57,6 +59,12 @@ public class PlayerRespawnListener implements Listener {
                     });
 
                 }
+            }
+            if (plugin.getConfig().getBoolean("spawn-on-sky")) {
+                Location respawnLoc = e.getRespawnLocation().clone();
+                playerData.set(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING, locationToString(respawnLoc));
+                respawnLoc.setY(300);
+                e.setRespawnLocation(respawnLoc);
             }
             openRespawnMenu(p);
         }
