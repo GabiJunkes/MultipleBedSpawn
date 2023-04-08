@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.setPropPlayer;
+import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.undoPropPlayer;
 
 public class PlayerJoinListener implements Listener {
     MultipleBedSpawn plugin;
@@ -18,6 +18,6 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent e){
         Player p = e.getPlayer();
-        setPropPlayer(p);
+        undoPropPlayer(p);
     }
 }
