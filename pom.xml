@@ -6,14 +6,14 @@
 
     <groupId>me.gabrielfj</groupId>
     <artifactId>MultipleBedSpawn</artifactId>
-    <version>1.5</version>
+    <version>1.6</version>
     <packaging>jar</packaging>
 
     <name>MultipleBedSpawn</name>
 
     <description>A simple plugin to allow players to choose which bed to respawn into.</description>
     <properties>
-        <java.version>19</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <url>https://github.com/GabrielFJunkes</url>
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.19.3-R0.1-SNAPSHOT</version>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
