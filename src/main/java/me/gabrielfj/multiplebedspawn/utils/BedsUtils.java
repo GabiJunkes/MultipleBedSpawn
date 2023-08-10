@@ -13,6 +13,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.TileState;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -79,5 +81,42 @@ public class BedsUtils{
         }
 
         return true;
+    }
+
+    public static int getMaxNumberOfBeds(Player player){
+        int maxBeds = plugin.getConfig().getInt("max-beds");
+        int maxBedsByPerms = 0;
+        if (player.hasPermission("multiplebedspawn.maxcount")){
+            player.chat("tem");
+            for (PermissionAttachmentInfo perm : player.getEffectivePermissions()){
+                String permName = perm.getPermission();
+                if (permName.contains("multiplebedspawn.maxcount.") && perm.getValue()){
+                    String maxCount = (permName.split("multiplebedspawn.maxcount."))[1].trim();
+                    player.chat(maxCount);
+                    try{
+                        int max = Integer.parseInt(maxCount);
+                        if (max>53) {
+                            plugin.getLogger().warning("Permission "+permName+" is invalid! Should be lower than 53. Value defaulted to 53, please remove this permission. Warning triggered by player "+player.getName());
+                            max = 53;
+                        }
+                        if (max>maxBedsByPerms){
+                            maxBedsByPerms = max;
+                        }
+                    }catch (Exception err){
+                        plugin.getLogger().warning("Permission "+permName+" is invalid! Should be a number after 'maxcount.'. Warning triggered by player "+player.getName());
+                    }
+                }
+            }
+        }
+        if (maxBeds>53) {
+            plugin.getLogger().warning("Max bed count cant be over 53! Value defaulted to 53.");
+            plugin.getConfig().set("max-beds", 53);
+            plugin.saveConfig();
+            maxBeds = 53;
+        }
+        if (maxBedsByPerms>0){
+            maxBeds = maxBedsByPerms;
+        }
+        return maxBeds;
     }
 }

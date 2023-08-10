@@ -13,12 +13,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+
+import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.getMaxNumberOfBeds;
 
 public class PlayerGetsOnBedListener implements Listener {
 
@@ -41,10 +44,7 @@ public class PlayerGetsOnBedListener implements Listener {
             Block bed = e.getBed();
             PersistentDataContainer playerData = player.getPersistentDataContainer();
 
-            int maxBeds = plugin.getConfig().getInt("max-beds");
-            if (maxBeds>53) {
-                maxBeds = 53;
-            }
+            int maxBeds = getMaxNumberOfBeds(player);
             int playerBedsCount = 0;
             PlayerBedsData playerBedsData = null;
             if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
