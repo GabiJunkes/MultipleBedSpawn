@@ -22,9 +22,9 @@ public final class MultipleBedSpawn extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        getConfig().options().copyDefaults();
+        getConfig().options().copyDefaults(true);
+        saveConfig();
         createLanguageConfig();
-        saveDefaultConfig();
 
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
         getServer().getPluginManager().registerEvents(new RespawnMenuHandler(this), this);

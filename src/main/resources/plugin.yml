@@ -13,3 +13,12 @@ commands:
   removebed:
     description: Opens a menu to remove saved beds
     usage: /<command>
+permissions:
+  multiplebedspawn.skipcooldown:
+    description: Allows the player to skip the bed's respawn cooldown
+    default: false
+  multiplebedspawn.maxcount.*:
+    description: Allows to set custom max number of beds (ignores the config)
+    default: false
+
+
