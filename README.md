@@ -17,7 +17,7 @@ And rename it with the command ```/renamebed 'the name they want'``` while looki
 
 The plugin has a lot of options
 
-<strong>lang</strong> - Chooses the language of the plugin, at the moment we have 4, English (enUS), Portuguese (ptBR), German (deDe) and Russian (ruRu), but you can view all the supported languages at the folder ```src/main/resources/language``` inside this repo.
+<strong>lang</strong> - Chooses the language of the plugin, at the moment we have 5, English (enUS), Portuguese (ptBR), German (deDE), Russian (ruRU) and Swedish(svSE), but you can view all the supported languages at the folder ```src/main/resources/language``` inside this repo.
 
 <strong>max-beds</strong> - The maximum number of beds a player can have.
 
