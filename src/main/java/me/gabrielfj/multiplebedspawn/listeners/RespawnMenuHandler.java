@@ -205,7 +205,14 @@ public class RespawnMenuHandler implements Listener {
 
         }else{
 
+            String spawnCoords[] = playerData.get(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING).split(":");
+            Location location = new Location(p.getWorld(), Double.parseDouble(spawnCoords[0]), Double.parseDouble(spawnCoords[1]), Double.parseDouble(spawnCoords[2]));
+            playerData.remove(new NamespacedKey(plugin, "spawnLoc"));
             undoPropPlayer(p);
+            boolean test = p.teleport(location);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                p.teleport(location);
+            }, 1L);
 
         }
 
