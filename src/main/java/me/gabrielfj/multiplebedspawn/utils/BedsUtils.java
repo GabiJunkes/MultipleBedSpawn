@@ -87,12 +87,10 @@ public class BedsUtils{
         int maxBeds = plugin.getConfig().getInt("max-beds");
         int maxBedsByPerms = 0;
         if (player.hasPermission("multiplebedspawn.maxcount")){
-            player.chat("tem");
             for (PermissionAttachmentInfo perm : player.getEffectivePermissions()){
                 String permName = perm.getPermission();
                 if (permName.contains("multiplebedspawn.maxcount.") && perm.getValue()){
                     String maxCount = (permName.split("multiplebedspawn.maxcount."))[1].trim();
-                    player.chat(maxCount);
                     try{
                         int max = Integer.parseInt(maxCount);
                         if (max>53) {
