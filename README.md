@@ -3,6 +3,8 @@ A simple Minecraft plugin to allow players to choose which bed to respawn into.
 
 [Spigot page](https://www.spigotmc.org/resources/multiple-bed-spawn.107057)
 
+[Hangar page](https://hangar.papermc.io/GabrielFJ/MultipleBedSpawn)
+
 # How it works
 
 When a player dies, if they have at least one bed, a respawn menu appears so they can choose where to respawn. With which bed displaying the location and cooldown timer if enabled.
