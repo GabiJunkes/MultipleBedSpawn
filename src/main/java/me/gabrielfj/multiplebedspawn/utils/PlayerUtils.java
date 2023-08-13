@@ -13,6 +13,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.checksIfBedExists;
 
 
 public class PlayerUtils {
@@ -93,6 +96,39 @@ public class PlayerUtils {
             playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
             p.teleport(locSpawn);
         }
+    }
+
+    public static Integer getPlayerBedsCount(Player p){
+        PersistentDataContainer playerData = p.getPersistentDataContainer();
+        PlayerBedsData playerBedsData = null;
+        AtomicInteger playerBedsCount = new AtomicInteger();
+        playerBedsCount.set(0);
+        if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
+            playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
+            if (playerBedsData != null && playerBedsData.getPlayerBedData() != null) {
+                HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
+                if (!plugin.getConfig().getBoolean("link-worlds")) {
+                    HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
+                    beds.forEach((uuid, bedData) -> {
+                        // clear lists so beds are only from the world that player is in
+                        if (!bedData.getBedWorld().equalsIgnoreCase(p.getWorld().getName())) {
+                            bedsT.remove(uuid);
+                        }
+                    });
+                    beds = bedsT;
+                }
+                playerBedsCount.set(beds.size());
+                beds.forEach((uuid, bedData) -> {
+                    String[] location = bedData.getBedCoords().split(":");
+                    Location bedLoc = new Location(p.getWorld(), Double.parseDouble(location[0]), Double.parseDouble(location[1]), Double.parseDouble(location[2]));
+                    if(!checksIfBedExists(bedLoc, p, uuid, bedData.getBedWorld())){
+                        playerBedsCount.addAndGet(-1);
+                    }
+                });
+
+            }
+        }
+        return playerBedsCount.get();
     }
 
 }
