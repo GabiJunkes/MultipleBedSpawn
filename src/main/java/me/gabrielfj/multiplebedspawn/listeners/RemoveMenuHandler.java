@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.removePlayerBed;
+import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.getPlayerBedsCount;
 
 public class RemoveMenuHandler implements Listener {
     static MultipleBedSpawn plugin;
@@ -33,24 +34,12 @@ public class RemoveMenuHandler implements Listener {
 
         // gets how much beds player has to use on for loop and for the if check
         PersistentDataContainer playerData = p.getPersistentDataContainer();
-        int playerBedsCount = 0;
         PlayerBedsData playerBedsData = null;
+
+        int playerBedsCount = getPlayerBedsCount(p);
+
         if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
             playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
-            if (playerBedsData != null && playerBedsData.getPlayerBedData() != null) {
-                HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
-                if (!plugin.getConfig().getBoolean("link-worlds")) {
-                    HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
-                    beds.forEach((uuid, bed) -> {
-                        // clear lists so beds are only from the world that player is in
-                        if (!bed.getBedWorld().equalsIgnoreCase(p.getWorld().getName())) {
-                            bedsT.remove(uuid);
-                        }
-                    });
-                    beds = bedsT;
-                }
-                playerBedsCount = beds.size();
-            }
         }
 
         // if the player doesnt have any beds than dont open menu

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.getMaxNumberOfBeds;
+import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.getPlayerBedsCount;
 
 public class PlayerGetsOnBedListener implements Listener {
 
@@ -45,24 +46,12 @@ public class PlayerGetsOnBedListener implements Listener {
             PersistentDataContainer playerData = player.getPersistentDataContainer();
 
             int maxBeds = getMaxNumberOfBeds(player);
-            int playerBedsCount = 0;
             PlayerBedsData playerBedsData = null;
+
+            int playerBedsCount = getPlayerBedsCount(player);
+
             if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
                 playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
-                if (playerBedsData != null && playerBedsData.getPlayerBedData() != null) {
-                    HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
-                    if (!plugin.getConfig().getBoolean("link-worlds")) {
-                        HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
-                        beds.forEach((uuid, bedData) -> {
-                            // clear lists so beds are only from the world that player is in
-                            if (!bedData.getBedWorld().equalsIgnoreCase(player.getWorld().getName())) {
-                                bedsT.remove(uuid);
-                            }
-                        });
-                        beds = bedsT;
-                    }
-                    playerBedsCount = beds.size();
-                }
             }
 
             if (playerBedsCount < maxBeds) {
