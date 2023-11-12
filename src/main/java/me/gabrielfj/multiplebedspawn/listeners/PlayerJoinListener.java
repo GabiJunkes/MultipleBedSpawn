@@ -24,13 +24,11 @@ public class PlayerJoinListener implements Listener {
         Player p = e.getPlayer();
         PersistentDataContainer playerData = p.getPersistentDataContainer();
         if (plugin.getConfig().getBoolean("spawn-on-sky") && playerData.has(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING)) {
-            undoPropPlayer(p);
             String spawnCoords[] = playerData.get(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING).split(":");
             Location location = new Location(p.getWorld(), Double.parseDouble(spawnCoords[0]), Double.parseDouble(spawnCoords[1]), Double.parseDouble(spawnCoords[2]));
             playerData.remove(new NamespacedKey(plugin, "spawnLoc"));
             p.teleport(location);
-        }else if(!p.getCanPickupItems()){
-            undoPropPlayer(p);
         }
+        undoPropPlayer(p);
     }
 }

@@ -29,46 +29,56 @@ public class PlayerUtils {
     public static void setPropPlayer(Player p){
 
         PersistentDataContainer playerData = p.getPersistentDataContainer();
-        if (!playerData.has(new NamespacedKey(plugin, "lastWalkspeed"), PersistentDataType.FLOAT)) {
+        if (!playerData.has(new NamespacedKey(plugin, "hasProp"), PersistentDataType.BOOLEAN)) {
             p.setInvulnerable(true);
+
+            playerData.set(new NamespacedKey(plugin, "isInvisible"), PersistentDataType.BOOLEAN, p.isInvisible());
             p.setInvisible(true);
+
+            playerData.set(new NamespacedKey(plugin, "canPickupItems"), PersistentDataType.BOOLEAN, p.getCanPickupItems());
             p.setCanPickupItems(false);
+
             if (plugin.getConfig().getBoolean("spawn-on-sky")) {
-                int playerAllowFly = (p.getAllowFlight()) ? 1 : 0;
-                playerData.set(new NamespacedKey(plugin, "allowFly"), PersistentDataType.INTEGER, playerAllowFly);
+                playerData.set(new NamespacedKey(plugin, "allowFly"), PersistentDataType.BOOLEAN, p.getAllowFlight());
+                playerData.set(new NamespacedKey(plugin, "isFlying"), PersistentDataType.BOOLEAN, p.isFlying());
                 p.setAllowFlight(true);
                 p.setFlying(true);
             }
             playerData.set(new NamespacedKey(plugin, "lastWalkspeed"), PersistentDataType.FLOAT, p.getWalkSpeed());
             p.setWalkSpeed(0);
+
+            playerData.set(new NamespacedKey(plugin, "hasProp"), PersistentDataType.BOOLEAN, true);
         }
     }
 
     public static void undoPropPlayer(Player p){
 
         PersistentDataContainer playerData = p.getPersistentDataContainer();
-        p.setInvisible(false);
-        p.setInvulnerable(false);
-        p.setCanPickupItems(true);
-        if (playerData.has(new NamespacedKey(plugin, "lastWalkspeed"), PersistentDataType.FLOAT)){
+        if (playerData.has(new NamespacedKey(plugin, "hasProp"), PersistentDataType.BOOLEAN)) {
+
+            p.setInvulnerable(false);
+            p.setInvisible(playerData.get(new NamespacedKey(plugin, "isInvisible"), PersistentDataType.BOOLEAN));
+            p.setCanPickupItems(playerData.get(new NamespacedKey(plugin, "canPickupItems"), PersistentDataType.BOOLEAN));
+
+            playerData.remove(new NamespacedKey(plugin, "isInvisible"));
+            playerData.remove(new NamespacedKey(plugin, "canPickupItems"));
+
             p.setWalkSpeed(playerData.get(new NamespacedKey(plugin, "lastWalkspeed"), PersistentDataType.FLOAT));
             playerData.remove(new NamespacedKey(plugin, "lastWalkspeed"));
-        }else {
-            p.setWalkSpeed(0.2F);
-        }
-        if (p.getWalkSpeed()==0.0){
-            p.setWalkSpeed(0.2F);
-        }
 
-        if (plugin.getConfig().getBoolean("spawn-on-sky")) {
-            if (playerData.has(new NamespacedKey(plugin, "allowFly"), PersistentDataType.INTEGER)){
-                boolean playerAllowFly = (playerData.get(new NamespacedKey(plugin, "allowFly"), PersistentDataType.INTEGER) == 1) ? true : false;
-                p.setAllowFlight(playerAllowFly);
+
+            if (plugin.getConfig().getBoolean("spawn-on-sky")) {
+                p.setAllowFlight(playerData.get(new NamespacedKey(plugin, "allowFly"), PersistentDataType.BOOLEAN));
+                p.setFlying(playerData.get(new NamespacedKey(plugin, "isFlying"), PersistentDataType.BOOLEAN));
+
                 playerData.remove(new NamespacedKey(plugin, "allowFly"));
+                playerData.remove(new NamespacedKey(plugin, "isFlying"));
             }
-            p.setFlying(false);
+
+            playerData.remove(new NamespacedKey(plugin, "hasProp"));
+
+            p.closeInventory();
         }
-        p.closeInventory();
 
     }
 
