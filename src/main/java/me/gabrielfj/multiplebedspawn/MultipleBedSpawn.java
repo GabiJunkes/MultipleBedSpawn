@@ -4,7 +4,6 @@ import me.gabrielfj.multiplebedspawn.commands.NameCommand;
 import me.gabrielfj.multiplebedspawn.commands.RemoveCommand;
 import me.gabrielfj.multiplebedspawn.listeners.*;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,8 +12,6 @@ import java.io.*;
 
 public final class MultipleBedSpawn extends JavaPlugin {
 
-    private File customConfigFile;
-    private FileConfiguration customConfig;
     private Configuration messages;
 
     private static MultipleBedSpawn instance;

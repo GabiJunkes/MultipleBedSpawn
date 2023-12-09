@@ -58,6 +58,7 @@ public class PlayerGetsOnBedListener implements Listener {
 
                 UUID randomUUID = UUID.randomUUID();
                 BlockState blockState = bed.getState();
+                
                 if (blockState instanceof TileState tileState) { // sets a randomUUID to the bed if the bed doesnt have it or get the bed uuid
                     PersistentDataContainer container = tileState.getPersistentDataContainer();
 
@@ -65,6 +66,10 @@ public class PlayerGetsOnBedListener implements Listener {
                         container.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, "" + randomUUID);
                     } else {
                         randomUUID = UUID.fromString(container.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING));
+                        if ((playerBedsData==null || (playerBedsData!=null && !playerBedsData.hasBed(randomUUID.toString()))) && plugin.getConfig().getBoolean("exclusive-bed")){
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-already-has-owner")));
+                            return;
+                        }
                     }
 
                     tileState.update();
