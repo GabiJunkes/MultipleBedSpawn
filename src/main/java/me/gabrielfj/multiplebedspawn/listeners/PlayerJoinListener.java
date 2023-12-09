@@ -23,10 +23,11 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoinEvent(PlayerJoinEvent e){
         Player p = e.getPlayer();
         PersistentDataContainer playerData = p.getPersistentDataContainer();
-        if (plugin.getConfig().getBoolean("spawn-on-sky") && playerData.has(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING)) {
-            String spawnCoords[] = playerData.get(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING).split(":");
+        NamespacedKey spawnLocName = new NamespacedKey(plugin, "spawnLoc");
+        if (plugin.getConfig().getBoolean("spawn-on-sky") && playerData.has(spawnLocName, PersistentDataType.STRING)) {
+            String spawnCoords[] = playerData.get(spawnLocName, PersistentDataType.STRING).split(":");
             Location location = new Location(p.getWorld(), Double.parseDouble(spawnCoords[0]), Double.parseDouble(spawnCoords[1]), Double.parseDouble(spawnCoords[2]));
-            playerData.remove(new NamespacedKey(plugin, "spawnLoc"));
+            playerData.remove(spawnLocName);
             p.teleport(location);
         }
         undoPropPlayer(p);

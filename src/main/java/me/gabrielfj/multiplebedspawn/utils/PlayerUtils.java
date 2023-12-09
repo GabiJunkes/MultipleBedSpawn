@@ -104,6 +104,7 @@ public class PlayerUtils {
                 beds.get(uuid).setBedCooldown(System.currentTimeMillis() + (plugin.getConfig().getLong("bed-cooldown") * 1000));
             }
             playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
+            playerData.remove(new NamespacedKey(plugin, "spawnLoc"));
             p.teleport(locSpawn);
         }
     }
