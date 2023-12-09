@@ -83,6 +83,17 @@ public class BedsUtils{
         return true;
     }
 
+    public static Block checkIfIsBed(Block block){
+        if (block!= null && block.getBlockData() instanceof Bed bedPart){
+            // since the data is in the head we need to set the Block bed to its head
+            if (bedPart.getPart().toString()=="FOOT"){
+                block = block.getRelative(bedPart.getFacing());
+            }
+            return block;
+        }
+        return null;
+    }
+
     public static int getMaxNumberOfBeds(Player player){
         int maxBeds = plugin.getConfig().getInt("max-beds");
         int maxBedsByPerms = 0;
