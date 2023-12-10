@@ -42,6 +42,7 @@ public class ShareCommand extends BukkitCommand {
             Player ownerPlayer = (Player) sender;
             Player receiverPlayer = Bukkit.getPlayer(args[0]);
             if (receiverPlayer==null){
+                ownerPlayer.sendMessage(ChatColor.RED + plugin.getMessages("player-not-found"));
                 return false;
             }
             if (receiverPlayer==ownerPlayer){
@@ -59,7 +60,7 @@ public class ShareCommand extends BukkitCommand {
                 }
 
                 if (bedUUID==null){
-                    ownerPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-not-registered-message")));
+                    ownerPlayer.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-registered-message"));
                     return false;
                 }
 
@@ -78,15 +79,16 @@ public class ShareCommand extends BukkitCommand {
                             receiverBedsData = new PlayerBedsData(receiverPlayer, bed, bedUUID.toString());
                         }
                         receiverData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), receiverBedsData);
-                        receiverPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-registered-successfully-message")));
+                        receiverPlayer.sendMessage(plugin.getMessages("bed-registered-successfully-message"));
                         removePlayerBed(bedUUID, ownerPlayer);
                     }else{
-                        ownerPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-not-registered-message")));
+                        ownerPlayer.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-registered-message"));
                         return false;
                     }
                 }
             }else{
-                ownerPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-not-found-message")));
+                plugin.getLogger().info("Not found");
+                ownerPlayer.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-found-message"));
                 return false;
             }
 
