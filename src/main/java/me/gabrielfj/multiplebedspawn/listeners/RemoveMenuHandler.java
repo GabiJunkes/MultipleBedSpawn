@@ -27,7 +27,7 @@ public class RemoveMenuHandler implements Listener {
     static MultipleBedSpawn plugin;
 
     public RemoveMenuHandler(MultipleBedSpawn plugin) {
-        this.plugin = plugin;
+        RemoveMenuHandler.plugin = plugin;
     }
 
     public static void openRemoveMenu(Player p){
@@ -222,7 +222,7 @@ public class RemoveMenuHandler implements Listener {
                     PersistentDataContainer data = item_meta.getPersistentDataContainer();
 
                     String uuid = data.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
-                    removePlayerBed(uuid, p.getUniqueId().toString());
+                    removePlayerBed(uuid, p);
                     updateItens(e.getClickedInventory(), p);
 
                 } else if (e.getCurrentItem().getType().toString().equalsIgnoreCase("BARRIER")) {

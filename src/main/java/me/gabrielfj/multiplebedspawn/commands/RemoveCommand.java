@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 import static me.gabrielfj.multiplebedspawn.listeners.RemoveMenuHandler.openRemoveMenu;
 
-import java.lang.module.ModuleDescriptor.Opens;
 import java.util.ArrayList;
 
 public class RemoveCommand extends BukkitCommand {

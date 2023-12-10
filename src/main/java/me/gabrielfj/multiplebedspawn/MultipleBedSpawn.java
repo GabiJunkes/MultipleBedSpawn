@@ -2,6 +2,7 @@ package me.gabrielfj.multiplebedspawn;
 
 import me.gabrielfj.multiplebedspawn.commands.NameCommand;
 import me.gabrielfj.multiplebedspawn.commands.RemoveCommand;
+import me.gabrielfj.multiplebedspawn.commands.ShareCommand;
 import me.gabrielfj.multiplebedspawn.listeners.*;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -32,6 +33,9 @@ public final class MultipleBedSpawn extends JavaPlugin {
         this.getServer().getCommandMap().register("renamebed", new NameCommand(this, "renamebed"));
         if (this.getConfig().getBoolean("remove-beds-gui")) {
             this.getServer().getCommandMap().register("removebed", new RemoveCommand(this, "removebed"));
+        }
+        if (this.getConfig().getBoolean("bed-sharing")) {
+            this.getServer().getCommandMap().register("sharebed", new ShareCommand(this, "sharebed"));
         }
     }
 

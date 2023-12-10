@@ -31,7 +31,7 @@ public class RespawnMenuHandler implements Listener {
     static MultipleBedSpawn plugin;
 
     public RespawnMenuHandler(MultipleBedSpawn plugin) {
-        this.plugin = plugin;
+        RespawnMenuHandler.plugin = plugin;
     }
 
     public static void updateItens(Inventory gui, Player p){

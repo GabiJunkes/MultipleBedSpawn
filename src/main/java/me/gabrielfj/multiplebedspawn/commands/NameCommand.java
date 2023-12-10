@@ -7,7 +7,6 @@ import me.gabrielfj.multiplebedspawn.models.PlayerBedsData;
 
 import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.checkIfIsBed;
 
-import java.lang.module.ModuleDescriptor.Opens;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
@@ -15,14 +14,11 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.TileState;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
 
 
 public class NameCommand extends BukkitCommand  {
@@ -31,7 +27,7 @@ public class NameCommand extends BukkitCommand  {
     public NameCommand(MultipleBedSpawn plugin, String name) {
         super(name);
         NameCommand.plugin = plugin;
-        this.description = "Change the name of the bed you are looking at";
+        this.description = "Changes the name of the bed you are looking at";
         this.usageMessage = "/renamebed <name of the bed>";
         this.setAliases(new ArrayList<String>());
     }

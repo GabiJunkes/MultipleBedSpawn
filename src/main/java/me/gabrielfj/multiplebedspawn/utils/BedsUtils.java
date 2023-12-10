@@ -23,28 +23,35 @@ import java.util.UUID;
 
 public class BedsUtils{
     static MultipleBedSpawn plugin = MultipleBedSpawn.getInstance();
-    public static void removePlayerBed(String bedUUID, String uuid){
+    public static void removePlayerBed(String bedUUID, Player p){
+        PersistentDataContainer playerData = p.getPersistentDataContainer();
+        // checks to see if player has beds
+        if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
+            PlayerBedsData playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
+            HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
+            if (beds.containsKey(bedUUID)){
+                BedData bedData = beds.get(bedUUID);
+                playerBedsData.removeBed(bedUUID);
+                playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
 
-        Player p = Bukkit.getPlayer(UUID.fromString(uuid));
-
-        // checks if player object exists
-        if (p != null) {
-
-            PersistentDataContainer playerData = p.getPersistentDataContainer();
-            // checks to see if player has beds
-            if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
-                PlayerBedsData playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
-                HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
-                if (beds.containsKey(bedUUID)){
-                    playerBedsData.removeBed(bedUUID);
-                    if (beds==null){
-                        playerData.remove(new NamespacedKey(plugin, "beds"));
-                    }else{
-                        playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
+                World world = Bukkit.getWorld(bedData.getBedWorld());
+                String loc[] = bedData.getBedCoords().split(":");
+                Location locBed = new Location(world, Double.parseDouble(loc[0]), Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
+                Block bed = world.getBlockAt(locBed);
+                if (bed.getBlockData() instanceof Bed bedPart){
+                    // since the data is in the head we need to set the Block bed to its head
+                    if (bedPart.getPart().toString()=="FOOT"){
+                        bed = (Block) bed.getRelative(bedPart.getFacing());
                     }
                 }
-            }
+                BlockState blockState = bed.getState();
+                if (blockState instanceof TileState tileState){
+                    PersistentDataContainer container = tileState.getPersistentDataContainer();
+                    container.remove(new NamespacedKey(plugin, "uuid"));
+                    tileState.update();
+                }
 
+            }
         }
     }
     public static boolean checksIfBedExists(Location locBed, Player p, String bedUUID, String worldString){
@@ -61,7 +68,7 @@ public class BedsUtils{
 
         if (!isBed){
 
-            removePlayerBed(bedUUID, p.getUniqueId().toString());
+            removePlayerBed(bedUUID, p);
             return false;
 
         }else{
@@ -72,7 +79,7 @@ public class BedsUtils{
                 String uuid = container.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
 
                 if (container==null || uuid==null || !uuid.equalsIgnoreCase(bedUUID)){
-                    removePlayerBed(bedUUID, p.getUniqueId().toString());
+                    removePlayerBed(bedUUID, p);
                     return false;
                 }
 
