@@ -1,7 +1,6 @@
 package me.gabrielfj.multiplebedspawn.commands;
 
 import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;

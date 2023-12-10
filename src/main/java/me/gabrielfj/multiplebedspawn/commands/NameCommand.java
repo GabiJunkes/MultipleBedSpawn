@@ -56,7 +56,7 @@ public class NameCommand extends BukkitCommand  {
                 }
 
                 if (bedUUID==null){
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-not-registered-message")));
+                    p.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-registered-message"));
                     return false;
                 }
 
@@ -71,12 +71,12 @@ public class NameCommand extends BukkitCommand  {
                         playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
                         p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-name-registered-successfully-message")));
                     }else{
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-not-registered-message")));
+                        p.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-registered-message"));
                         return false;
                     }
                 }
             }else{
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-not-found-message")));
+                p.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-found-message"));
                 return false;
             }
 
