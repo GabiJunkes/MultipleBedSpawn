@@ -5,14 +5,11 @@ import me.gabrielfj.multiplebedspawn.commands.RemoveCommand;
 import me.gabrielfj.multiplebedspawn.commands.ShareCommand;
 import me.gabrielfj.multiplebedspawn.listeners.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-import java.lang.reflect.Field;
 
 
 public final class MultipleBedSpawn extends JavaPlugin {
@@ -35,7 +32,7 @@ public final class MultipleBedSpawn extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerGetsOnBedListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerRespawnListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
-        
+
         getServer().getCommandMap().register(this.getName(), new NameCommand(this, "renamebed"));
         if (this.getConfig().getBoolean("remove-beds-gui")) {
             getServer().getCommandMap().register(this.getName(), new RemoveCommand(this, "removebed"));
