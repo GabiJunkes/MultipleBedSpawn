@@ -9,5 +9,5 @@ remove-beds-gui: false
 disable-bed-world-desc: true
 disable-bed-coords-desc: false
 spawn-on-sky: true
-exclusive-bed: true
-bed-sharing: true
+exclusive-bed: false
+bed-sharing: false

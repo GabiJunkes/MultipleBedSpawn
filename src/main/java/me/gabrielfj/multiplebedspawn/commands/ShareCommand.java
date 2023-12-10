@@ -18,7 +18,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
-import me.gabrielfj.multiplebedspawn.models.BedData;
 import me.gabrielfj.multiplebedspawn.models.BedsDataType;
 import me.gabrielfj.multiplebedspawn.models.PlayerBedsData;
 
