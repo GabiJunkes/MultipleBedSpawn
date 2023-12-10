@@ -4,11 +4,15 @@ import me.gabrielfj.multiplebedspawn.commands.NameCommand;
 import me.gabrielfj.multiplebedspawn.commands.RemoveCommand;
 import me.gabrielfj.multiplebedspawn.commands.ShareCommand;
 import me.gabrielfj.multiplebedspawn.listeners.*;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
+import java.lang.reflect.Field;
 
 
 public final class MultipleBedSpawn extends JavaPlugin {
@@ -16,6 +20,7 @@ public final class MultipleBedSpawn extends JavaPlugin {
     private Configuration messages;
 
     private static MultipleBedSpawn instance;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -30,12 +35,13 @@ public final class MultipleBedSpawn extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerGetsOnBedListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerRespawnListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
-        this.getServer().getCommandMap().register("renamebed", new NameCommand(this, "renamebed"));
+        
+        getServer().getCommandMap().register(this.getName(), new NameCommand(this, "renamebed"));
         if (this.getConfig().getBoolean("remove-beds-gui")) {
-            this.getServer().getCommandMap().register("removebed", new RemoveCommand(this, "removebed"));
+            getServer().getCommandMap().register(this.getName(), new RemoveCommand(this, "removebed"));
         }
         if (this.getConfig().getBoolean("bed-sharing")) {
-            this.getServer().getCommandMap().register("sharebed", new ShareCommand(this, "sharebed"));
+            getServer().getCommandMap().register(this.getName(), new ShareCommand(this, "sharebed"));
         }
     }
 
