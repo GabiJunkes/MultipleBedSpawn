@@ -1,7 +1,6 @@
 package me.gabrielfj.multiplebedspawn.listeners;
 
 import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
-import me.gabrielfj.multiplebedspawn.models.BedData;
 import me.gabrielfj.multiplebedspawn.models.BedsDataType;
 import me.gabrielfj.multiplebedspawn.models.PlayerBedsData;
 import org.bukkit.ChatColor;
@@ -13,11 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,6 +55,7 @@ public class PlayerGetsOnBedListener implements Listener {
 
                 UUID randomUUID = UUID.randomUUID();
                 BlockState blockState = bed.getState();
+                
                 if (blockState instanceof TileState tileState) { // sets a randomUUID to the bed if the bed doesnt have it or get the bed uuid
                     PersistentDataContainer container = tileState.getPersistentDataContainer();
 
@@ -65,6 +63,10 @@ public class PlayerGetsOnBedListener implements Listener {
                         container.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, "" + randomUUID);
                     } else {
                         randomUUID = UUID.fromString(container.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING));
+                        if ((playerBedsData==null || (playerBedsData!=null && !playerBedsData.hasBed(randomUUID.toString()))) && plugin.getConfig().getBoolean("exclusive-bed")){
+                            player.sendMessage(ChatColor.RED + plugin.getMessages("bed-already-has-owner"));
+                            return;
+                        }
                     }
 
                     tileState.update();
@@ -91,7 +93,7 @@ public class PlayerGetsOnBedListener implements Listener {
 
 
             } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("max-beds-message")));
+                player.sendMessage(ChatColor.RED + plugin.getMessages("max-beds-message"));
             }
 
             e.setCancelled(plugin.getConfig().getBoolean("disable-sleeping"));

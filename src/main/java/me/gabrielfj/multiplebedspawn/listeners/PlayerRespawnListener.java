@@ -25,7 +25,7 @@ public class PlayerRespawnListener implements Listener {
     static MultipleBedSpawn plugin;
 
     public PlayerRespawnListener(MultipleBedSpawn plugin) {
-        this.plugin = plugin;
+        PlayerRespawnListener.plugin = plugin;
     }
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent e){

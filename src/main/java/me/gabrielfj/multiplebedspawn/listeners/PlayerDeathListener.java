@@ -1,14 +1,10 @@
 package me.gabrielfj.multiplebedspawn.listeners;
 
 import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
-import me.gabrielfj.multiplebedspawn.models.BedsDataType;
-import me.gabrielfj.multiplebedspawn.models.PlayerBedsData;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.List;
 

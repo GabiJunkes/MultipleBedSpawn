@@ -1,30 +1,30 @@
 package me.gabrielfj.multiplebedspawn.commands;
 
 import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import static me.gabrielfj.multiplebedspawn.listeners.RemoveMenuHandler.openRemoveMenu;
 
-public class RemoveCommand implements CommandExecutor {
+import java.util.ArrayList;
+
+public class RemoveCommand extends BukkitCommand {
     static MultipleBedSpawn plugin;
-    public RemoveCommand(MultipleBedSpawn plugin) {
-        this.plugin = plugin;
+    
+    public RemoveCommand(MultipleBedSpawn plugin, String name) {
+        super(name);
+        RemoveCommand.plugin = plugin;
+        this.description = "Opens a menu to remove saved beds";
+        this.usageMessage = "/removebed";
+        this.setAliases(new ArrayList<String>());
     }
+    
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean execute(CommandSender sender, String alias, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            if (plugin.getConfig().getBoolean("remove-beds-gui")){
-                openRemoveMenu(p);
-            }else{
-                p.sendMessage(ChatColor.RED+plugin.getMessages("command-not-enabled"));
-                return false;
-            }
+            openRemoveMenu(p);
         }
         return true;
     }

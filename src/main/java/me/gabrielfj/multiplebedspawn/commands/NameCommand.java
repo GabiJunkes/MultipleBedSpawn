@@ -4,42 +4,36 @@ import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
 import me.gabrielfj.multiplebedspawn.models.BedData;
 import me.gabrielfj.multiplebedspawn.models.BedsDataType;
 import me.gabrielfj.multiplebedspawn.models.PlayerBedsData;
+
+import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.checkIfIsBed;
+
+import java.util.ArrayList;
+
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.TileState;
-import org.bukkit.block.data.type.Bed;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.UUID;
-import java.util.logging.Logger;
 
 
-public class NameCommand implements CommandExecutor {
+public class NameCommand extends BukkitCommand  {
     static MultipleBedSpawn plugin;
-    public NameCommand(MultipleBedSpawn plugin) {
-        this.plugin = plugin;
+    
+    public NameCommand(MultipleBedSpawn plugin, String name) {
+        super(name);
+        NameCommand.plugin = plugin;
+        this.description = "Changes the name of the bed you are looking at";
+        this.usageMessage = "/renamebed <name of the bed>";
+        this.setAliases(new ArrayList<String>());
     }
-    private Block checkIfIsBed(Block block){
-        if (block!= null && block.getBlockData() instanceof Bed bedPart){
-            // since the data is in the head we need to set the Block bed to its head
-            if (bedPart.getPart().toString()=="FOOT"){
-                block = block.getRelative(bedPart.getFacing());
-            }
-            return block;
-        }
-        return null;
-    }
+
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean execute(CommandSender sender, String alias, String[] args) {
         if (sender instanceof Player){
             String name = "";
             for (String arg : args){
@@ -62,7 +56,7 @@ public class NameCommand implements CommandExecutor {
                 }
 
                 if (bedUUID==null){
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-not-registered-message")));
+                    p.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-registered-message"));
                     return false;
                 }
 
@@ -77,16 +71,17 @@ public class NameCommand implements CommandExecutor {
                         playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
                         p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-name-registered-successfully-message")));
                     }else{
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-not-registered-message")));
+                        p.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-registered-message"));
                         return false;
                     }
                 }
             }else{
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-not-found-message")));
+                p.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-found-message"));
                 return false;
             }
 
         }
         return true;
     }
+
 }
