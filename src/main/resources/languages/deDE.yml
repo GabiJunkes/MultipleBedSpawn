@@ -10,3 +10,5 @@ bed-name-registered-successfully-message: "Der Name des Bettes wurde erfolgreich
 cooldown-text: "Countdown: {1}"
 close-menu: "Menü schließen"
 command-not-enabled: "Dieser Befehl ist nicht aktiviert!"
+bed-already-has-owner: "Bed already has an owner!"
+player-not-found: "Player not found!"
