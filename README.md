@@ -46,6 +46,10 @@ Leave empty to work in every world.
 
 <strong>spawn-on-sky</strong> - If true, players will spawn flying in the sky.
 
+<strong>exclusive-bed</strong> - If true, beds will allow only one registered player.
+
+<strong>bed-sharing</strong> - If true, players will be able to do `/sharebed <player>` and give the bed that they are looking to another player.
+
 # Permission
 
 <strong>multiplebedspawn.skipcooldown</strong> - Allow players to skip bed cool-down.
