@@ -22,10 +22,6 @@ import java.util.HashMap;
 public class BedsUtils{
     static MultipleBedSpawn plugin = MultipleBedSpawn.getInstance();
     public static void removePlayerBed(String bedUUID, Player p){
-        removePlayerBed(bedUUID, p, true);
-    }
-
-    public static void removePlayerBed(String bedUUID, Player p, boolean removeBedUUID){
         PersistentDataContainer playerData = p.getPersistentDataContainer();
         // checks to see if player has beds
         if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
@@ -36,9 +32,23 @@ public class BedsUtils{
                 playerBedsData.removeBed(bedUUID);
                 playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
 
-                if (removeBedUUID) {
-                    removeBedUUID(bedData);
+                World world = Bukkit.getWorld(bedData.getBedWorld());
+                String loc[] = bedData.getBedCoords().split(":");
+                Location locBed = new Location(world, Double.parseDouble(loc[0]), Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
+                Block bed = world.getBlockAt(locBed);
+                if (bed.getBlockData() instanceof Bed bedPart){
+                    // since the data is in the head we need to set the Block bed to its head
+                    if (bedPart.getPart().toString()=="FOOT"){
+                        bed = (Block) bed.getRelative(bedPart.getFacing());
+                    }
                 }
+                BlockState blockState = bed.getState();
+                if (blockState instanceof TileState tileState){
+                    PersistentDataContainer container = tileState.getPersistentDataContainer();
+                    container.remove(new NamespacedKey(plugin, "uuid"));
+                    tileState.update();
+                }
+
             }
         }
     }
@@ -122,24 +132,5 @@ public class BedsUtils{
             maxBeds = maxBedsByPerms;
         }
         return maxBeds;
-    }
-
-    private static void removeBedUUID(BedData bedData) {
-        World world = Bukkit.getWorld(bedData.getBedWorld());
-        String loc[] = bedData.getBedCoords().split(":");
-        Location locBed = new Location(world, Double.parseDouble(loc[0]), Double.parseDouble(loc[1]),Double.parseDouble(loc[2]));
-        Block bed = world.getBlockAt(locBed);
-        if (bed.getBlockData() instanceof Bed bedPart){
-            // since the data is in the head we need to set the Block bed to its head
-            if (bedPart.getPart().toString()=="FOOT"){
-                bed = (Block) bed.getRelative(bedPart.getFacing());
-            }
-        }
-        BlockState blockState = bed.getState();
-        if (blockState instanceof TileState tileState){
-            PersistentDataContainer container = tileState.getPersistentDataContainer();
-            container.remove(new NamespacedKey(plugin, "uuid"));
-            tileState.update();
-        }
     }
 }

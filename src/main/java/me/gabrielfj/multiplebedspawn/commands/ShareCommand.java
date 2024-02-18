@@ -1,7 +1,6 @@
 package me.gabrielfj.multiplebedspawn.commands;
 
 import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.checkIfIsBed;
-import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.removePlayerBed;
 
 import java.util.ArrayList;
 
@@ -69,18 +68,16 @@ public class ShareCommand extends BukkitCommand {
                 if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
                     playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
                     if (playerBedsData!=null && playerBedsData.getPlayerBedData()!=null && playerBedsData.hasBed(bedUUID)){
-                        PlayerBedsData receiverBedsData;
                         PersistentDataContainer receiverData = receiverPlayer.getPersistentDataContainer();
-                        if (receiverData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
-                            receiverBedsData = receiverData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
-                            // We need to assign spawn location to the owning player location, not the receiving player location
-                            receiverBedsData.setNewBed(ownerPlayer, bed, bedUUID);
-                        }else{
-                            receiverBedsData = new PlayerBedsData(receiverPlayer, bed, bedUUID.toString());
-                        }
+                        PlayerBedsData receiverBedsData = receiverData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())
+                            ? receiverData.get(new NamespacedKey(plugin, "beds"), new BedsDataType())
+                            : new PlayerBedsData();
+
+                        playerBedsData.shareBed(receiverBedsData, bedUUID);
                         receiverData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), receiverBedsData);
+                        playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
+
                         receiverPlayer.sendMessage(plugin.getMessages("bed-registered-successfully-message"));
-                        removePlayerBed(bedUUID, ownerPlayer, false);
                     }else{
                         ownerPlayer.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-registered-message"));
                         return false;
