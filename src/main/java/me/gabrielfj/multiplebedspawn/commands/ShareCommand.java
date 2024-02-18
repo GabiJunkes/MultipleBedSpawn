@@ -79,7 +79,7 @@ public class ShareCommand extends BukkitCommand {
                         }
                         receiverData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), receiverBedsData);
                         receiverPlayer.sendMessage(plugin.getMessages("bed-registered-successfully-message"));
-                        removePlayerBed(bedUUID, ownerPlayer);
+                        removePlayerBed(bedUUID, ownerPlayer, false);
                     }else{
                         ownerPlayer.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-registered-message"));
                         return false;
