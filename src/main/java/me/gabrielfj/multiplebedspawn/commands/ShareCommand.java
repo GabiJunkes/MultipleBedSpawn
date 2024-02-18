@@ -73,7 +73,8 @@ public class ShareCommand extends BukkitCommand {
                         PersistentDataContainer receiverData = receiverPlayer.getPersistentDataContainer();
                         if (receiverData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
                             receiverBedsData = receiverData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
-                            receiverBedsData.setNewBed(receiverPlayer, bed, bedUUID);
+                            // We need to assign spawn location to the owning player location, not the receiving player location
+                            receiverBedsData.setNewBed(ownerPlayer, bed, bedUUID);
                         }else{
                             receiverBedsData = new PlayerBedsData(receiverPlayer, bed, bedUUID.toString());
                         }
