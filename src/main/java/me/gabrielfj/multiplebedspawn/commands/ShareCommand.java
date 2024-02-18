@@ -72,7 +72,7 @@ public class ShareCommand extends BukkitCommand {
                         PlayerBedsData receiverBedsData;
                         PersistentDataContainer receiverData = receiverPlayer.getPersistentDataContainer();
                         if (receiverData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
-                            receiverBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
+                            receiverBedsData = receiverData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
                             receiverBedsData.setNewBed(receiverPlayer, bed, bedUUID);
                         }else{
                             receiverBedsData = new PlayerBedsData(receiverPlayer, bed, bedUUID.toString());
