@@ -95,7 +95,7 @@ public class PlayerGetsOnBedListener implements Listener {
             } else {
                 player.sendMessage(ChatColor.RED + plugin.getMessages("max-beds-message"));
             }
-
+            player.setBedSpawnLocation(null);
             e.setCancelled(plugin.getConfig().getBoolean("disable-sleeping"));
         }
     }

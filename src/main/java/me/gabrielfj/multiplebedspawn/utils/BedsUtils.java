@@ -52,8 +52,8 @@ public class BedsUtils{
             }
         }
     }
-    public static boolean checksIfBedExists(Location locBed, Player p, String bedUUID, String worldString){
-        World world = Bukkit.getWorld(worldString);
+    public static boolean checksIfBedExists(Location locBed, Player p, String bedUUID){
+        World world = locBed.getWorld();
         Block bed = world.getBlockAt(locBed);
         boolean isBed = false;
         if (bed.getBlockData() instanceof Bed bedPart){
