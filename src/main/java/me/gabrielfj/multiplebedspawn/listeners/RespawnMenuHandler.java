@@ -24,8 +24,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.checksIfBedExists;
 import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.*;
-import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.undoPropPlayer;
+import static me.gabrielfj.multiplebedspawn.utils.RunCommandUtils.runCommandOnSpawn;;
 
+@SuppressWarnings("deprecation")
 public class RespawnMenuHandler implements Listener {
 
     static MultipleBedSpawn plugin;
@@ -50,7 +51,6 @@ public class RespawnMenuHandler implements Listener {
                     if (data.has(new NamespacedKey(plugin, "cooldown"), PersistentDataType.LONG) && data.has(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING)){
 
                         long cooldown = data.get(new NamespacedKey(plugin, "cooldown"), PersistentDataType.LONG);
-                        String uuid = data.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
                         List<String> lore = item_meta.getLore();
 
                         int optionsCount = 2;
@@ -121,10 +121,11 @@ public class RespawnMenuHandler implements Listener {
 
             HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
             if (!plugin.getConfig().getBoolean("link-worlds")) {
+                World world = getPlayerRespawnLoc(p).getWorld();
                 HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
                 beds.forEach((uuid, bed) -> {
                     // clear lists so beds are only from the world that player is in
-                    if (!bed.getBedWorld().equalsIgnoreCase(p.getWorld().getName())) {
+                    if (!bed.getBedWorld().equalsIgnoreCase(world.getName())) {
                         bedsT.remove(uuid);
                     }
                 });
@@ -193,14 +194,14 @@ public class RespawnMenuHandler implements Listener {
 
         }else{
 
-            String spawnCoords[] = playerData.get(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING).split(":");
-            Location location = new Location(p.getWorld(), Double.parseDouble(spawnCoords[0]), Double.parseDouble(spawnCoords[1]), Double.parseDouble(spawnCoords[2]));
-            playerData.remove(new NamespacedKey(plugin, "spawnLoc"));
-            undoPropPlayer(p);
-            boolean test = p.teleport(location);
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                p.teleport(location);
-            }, 1L);
+            if (playerData.has(new NamespacedKey(plugin, "spawnLoc"))){
+                Location location = getPlayerRespawnLoc(p);
+                playerData.remove(new NamespacedKey(plugin, "spawnLoc"));
+                undoPropPlayer(p);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    p.teleport(location);
+                }, 1L);
+            }
 
         }
 
@@ -231,10 +232,10 @@ public class RespawnMenuHandler implements Listener {
 
                     String bedCoord[] = data.get(new NamespacedKey(plugin, "location"), PersistentDataType.STRING).split(":");
                     String world = data.get(new NamespacedKey(plugin, "world"), PersistentDataType.STRING);
-                    Location location = new Location(p.getWorld(), Double.parseDouble(bedCoord[0]), Double.parseDouble(bedCoord[1]), Double.parseDouble(bedCoord[2]));
+                    Location location = new Location(Bukkit.getWorld(world), Double.parseDouble(bedCoord[0]), Double.parseDouble(bedCoord[1]), Double.parseDouble(bedCoord[2]));
                     String uuid = data.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
 
-                    if (checksIfBedExists(location , p, uuid, world)){
+                    if (checksIfBedExists(location , p, uuid)){
 
                         teleportPlayer(p, data, playerData, playerBedsData, uuid);
 
@@ -246,15 +247,11 @@ public class RespawnMenuHandler implements Listener {
 
 
                 }else if(index==9 * ( (int) Math.ceil( bedCount / (Double) 9.0 ) )-1){
-                    if (plugin.getConfig().getBoolean("spawn-on-sky") && playerData.has(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING)) {
-                        String spawnCoords[] = playerData.get(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING).split(":");
-                        Location location = new Location(p.getWorld(), Double.parseDouble(spawnCoords[0]), Double.parseDouble(spawnCoords[1]), Double.parseDouble(spawnCoords[2]));
-                        playerData.remove(new NamespacedKey(plugin, "spawnLoc"));
-                        undoPropPlayer(p);
-                        p.teleport(location);
-                    }else{
-                        undoPropPlayer(p);
-                    }
+                    undoPropPlayer(p);
+                    Location location = getPlayerRespawnLoc(p);
+                    playerData.remove(new NamespacedKey(plugin, "spawnLoc"));
+                    p.teleport(location);
+                    runCommandOnSpawn(p);
                 }
             }
 
