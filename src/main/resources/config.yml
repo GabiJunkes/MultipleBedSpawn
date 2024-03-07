@@ -11,3 +11,5 @@ disable-bed-coords-desc: false
 spawn-on-sky: true
 exclusive-bed: false
 bed-sharing: false
+command-on-spawn: ""
+run-command-as-player: true

@@ -23,7 +23,12 @@ public class PlayerUtils {
     static MultipleBedSpawn plugin = MultipleBedSpawn.getInstance();
 
     public static String locationToString(Location loc){
-        return loc.getX()+":"+loc.getY()+":"+loc.getZ();
+        return loc.getWorld().getName()+":"+loc.getX()+":"+loc.getY()+":"+loc.getZ();
+    }
+
+    public static Location stringToLocation(String locString){
+        String[] loc = locString.split(":");
+        return new Location(Bukkit.getWorld(loc[0]), Double.parseDouble(loc[1]), Double.parseDouble(loc[2]), Double.parseDouble(loc[3]));
     }
 
     public static void setPropPlayer(Player p){
@@ -40,7 +45,6 @@ public class PlayerUtils {
 
             if (plugin.getConfig().getBoolean("spawn-on-sky")) {
                 playerData.set(new NamespacedKey(plugin, "allowFly"), PersistentDataType.BOOLEAN, p.getAllowFlight());
-                playerData.set(new NamespacedKey(plugin, "isFlying"), PersistentDataType.BOOLEAN, p.isFlying());
                 p.setAllowFlight(true);
                 p.setFlying(true);
             }
@@ -69,7 +73,7 @@ public class PlayerUtils {
 
             if (plugin.getConfig().getBoolean("spawn-on-sky")) {
                 p.setAllowFlight(playerData.get(new NamespacedKey(plugin, "allowFly"), PersistentDataType.BOOLEAN));
-                p.setFlying(playerData.get(new NamespacedKey(plugin, "isFlying"), PersistentDataType.BOOLEAN));
+                p.setFlying(false);
 
                 playerData.remove(new NamespacedKey(plugin, "allowFly"));
                 playerData.remove(new NamespacedKey(plugin, "isFlying"));
@@ -109,6 +113,21 @@ public class PlayerUtils {
         }
     }
 
+    public static Location getPlayerRespawnLoc(Player p){
+        Location loc = p.getLocation();
+        PersistentDataContainer playerData = p.getPersistentDataContainer();
+        if (playerData.has(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING)){
+            Location playerRespawnLocation = stringToLocation(playerData.get(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING));
+            if (playerRespawnLocation!=null){
+                if (plugin.getConfig().getBoolean("spawn-on=sky")){
+                    playerRespawnLocation.setY(playerRespawnLocation.getY()-300);
+                }
+                loc = playerRespawnLocation;
+            }
+        }
+        return loc;
+    }
+
     public static Integer getPlayerBedsCount(Player p){
         PersistentDataContainer playerData = p.getPersistentDataContainer();
         PlayerBedsData playerBedsData = null;
@@ -118,11 +137,13 @@ public class PlayerUtils {
             playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
             if (playerBedsData != null && playerBedsData.getPlayerBedData() != null) {
                 HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
+                World world = getPlayerRespawnLoc(p).getWorld();
+                String worldName = world.getName();
                 if (!plugin.getConfig().getBoolean("link-worlds")) {
                     HashMap<String, BedData> bedsT = (HashMap<String, BedData>) beds.clone();
                     beds.forEach((uuid, bedData) -> {
-                        // clear lists so beds are only from the world that player is in
-                        if (!bedData.getBedWorld().equalsIgnoreCase(p.getWorld().getName())) {
+                        // clear lists so beds are only from the world that player will respawn
+                        if (!bedData.getBedWorld().equalsIgnoreCase(worldName)) {
                             bedsT.remove(uuid);
                         }
                     });
@@ -131,8 +152,9 @@ public class PlayerUtils {
                 playerBedsCount.set(beds.size());
                 beds.forEach((uuid, bedData) -> {
                     String[] location = bedData.getBedCoords().split(":");
-                    Location bedLoc = new Location(p.getWorld(), Double.parseDouble(location[0]), Double.parseDouble(location[1]), Double.parseDouble(location[2]));
-                    if(!checksIfBedExists(bedLoc, p, uuid, bedData.getBedWorld())){
+                    String bedWorld = bedData.getBedWorld();
+                    Location bedLoc = new Location(Bukkit.getWorld(bedWorld), Double.parseDouble(location[0]), Double.parseDouble(location[1]), Double.parseDouble(location[2]));
+                    if(!checksIfBedExists(bedLoc, p, uuid)){
                         playerBedsCount.addAndGet(-1);
                     }
                 });

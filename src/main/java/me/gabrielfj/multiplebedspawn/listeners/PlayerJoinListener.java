@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.stringToLocation;
 import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.undoPropPlayer;
 
 public class PlayerJoinListener implements Listener {
@@ -25,8 +26,7 @@ public class PlayerJoinListener implements Listener {
         PersistentDataContainer playerData = p.getPersistentDataContainer();
         NamespacedKey spawnLocName = new NamespacedKey(plugin, "spawnLoc");
         if (plugin.getConfig().getBoolean("spawn-on-sky") && playerData.has(spawnLocName, PersistentDataType.STRING)) {
-            String spawnCoords[] = playerData.get(spawnLocName, PersistentDataType.STRING).split(":");
-            Location location = new Location(p.getWorld(), Double.parseDouble(spawnCoords[0]), Double.parseDouble(spawnCoords[1]), Double.parseDouble(spawnCoords[2]));
+            Location location = stringToLocation(playerData.get(spawnLocName, PersistentDataType.STRING));
             playerData.remove(spawnLocName);
             p.teleport(location);
         }

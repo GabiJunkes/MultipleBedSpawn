@@ -50,6 +50,10 @@ Leave empty to work in every world.
 
 <strong>bed-sharing</strong> - If true, players will be able to do `/sharebed <player>` and give the bed that they are looking to another player.
 
+<strong>command-on-spawn</strong> - Command to run when player clicks the SPAWN block, leave empty to disable.
+
+<strong>run-command-as-player</strong> - If true, command is run as the user that clicked it, else as console.
+
 # Permission
 
 <strong>multiplebedspawn.skipcooldown</strong> - Allow players to skip bed cool-down.
