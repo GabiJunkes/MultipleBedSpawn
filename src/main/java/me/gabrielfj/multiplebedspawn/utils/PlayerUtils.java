@@ -119,9 +119,6 @@ public class PlayerUtils {
         if (playerData.has(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING)){
             Location playerRespawnLocation = stringToLocation(playerData.get(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING));
             if (playerRespawnLocation!=null){
-                if (plugin.getConfig().getBoolean("spawn-on=sky")){
-                    playerRespawnLocation.setY(playerRespawnLocation.getY()-300);
-                }
                 loc = playerRespawnLocation;
             }
         }

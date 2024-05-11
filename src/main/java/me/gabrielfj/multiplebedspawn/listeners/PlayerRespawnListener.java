@@ -61,9 +61,9 @@ public class PlayerRespawnListener implements Listener {
             }
             Location loc = e.getRespawnLocation();
             if (plugin.getConfig().getBoolean("spawn-on-sky")){
+                playerData.set(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING, locationToString(loc));
                 loc.setY(loc.getY()+300);
             }
-            playerData.set(new NamespacedKey(plugin, "spawnLoc"), PersistentDataType.STRING, locationToString(loc));
             openRespawnMenu(p);
         }
     }
