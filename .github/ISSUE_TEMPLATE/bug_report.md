@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to help us improve. Change as needed!
 title: ''
 labels: bug
 assignees: GabrielFJunkes
@@ -8,11 +8,12 @@ assignees: GabrielFJunkes
 ---
 
 **Server software**
-[x] Spigot
-[ ] Paper
-[ ] Other
+- [x] Spigot
+- [ ] Paper
+- [ ] Other
 
-Minecraft version: 1.20.2
+**Minecraft version**
+ 1.20.2
 
 **Describe the bug**
 A clear and concise description of what the bug is.
