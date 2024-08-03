@@ -3,7 +3,7 @@ A simple Minecraft plugin to allow players to choose which bed to respawn into.
 
 [Spigot page](https://www.spigotmc.org/resources/multiple-bed-spawn.107057)
 
-[Hangar page](https://hangar.papermc.io/GabrielFJ/MultipleBedSpawn)
+[Hangar page](https://hangar.papermc.io/GabiJ/MultipleBedSpawn)
 
 # How it works
 
