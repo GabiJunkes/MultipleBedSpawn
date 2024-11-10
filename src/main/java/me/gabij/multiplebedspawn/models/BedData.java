@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import java.io.Serializable;
 
 public class BedData implements Serializable {
+    private static final long serialVersionUID = -4751385549566406619L;
 
     private String bedName;
     private Material bedMaterial;
