@@ -1,4 +1,4 @@
-package me.gabrielfj.multiplebedspawn.models;
+package me.gabij.multiplebedspawn.models;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.bukkit.persistence.PersistentDataAdapterContext;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
-public class BedsDataType implements PersistentDataType<byte[], PlayerBedsData> {
+public class BedDataType implements PersistentDataType<byte[], BedData> {
 
     @Override
     public Class<byte[]> getPrimitiveType() {
@@ -17,22 +17,22 @@ public class BedsDataType implements PersistentDataType<byte[], PlayerBedsData> 
     }
 
     @Override
-    public Class<PlayerBedsData> getComplexType() {
-        return PlayerBedsData.class;
+    public Class<BedData> getComplexType() {
+        return BedData.class;
     }
 
     @Override
-    public byte[] toPrimitive(PlayerBedsData complex, PersistentDataAdapterContext context) {
+    public byte[] toPrimitive(BedData complex, PersistentDataAdapterContext context) {
         return SerializationUtils.serialize(complex);
     }
 
     @Override
-    public PlayerBedsData fromPrimitive(byte[] primitive, PersistentDataAdapterContext context) {
+    public BedData fromPrimitive(byte[] primitive, PersistentDataAdapterContext context) {
         try {
             InputStream is = new ByteArrayInputStream(primitive);
             ObjectInputStream o = new ObjectInputStream(is);
-            return (PlayerBedsData) o.readObject();
-        } catch (IOException | ClassNotFoundException e){
+            return (BedData) o.readObject();
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;

@@ -1,11 +1,11 @@
 name: MultipleBedSpawn
 version: '${project.version}'
-main: me.gabrielfj.multiplebedspawn.MultipleBedSpawn
+main: me.gabij.multiplebedspawn.MultipleBedSpawn
 api-version: 1.19
 load: STARTUP
-authors: [ GabrielFJ ]
+authors: [ Gabi ]
 description: A simple plugin to allow players to choose which bed to respawn into.
-website: https://github.com/GabrielFJunkes
+website: https://github.com/GabiJunkes
 permissions:
   multiplebedspawn.skipcooldown:
     description: Allows the player to skip the bed's respawn cooldown

@@ -1,17 +1,17 @@
-package me.gabrielfj.multiplebedspawn.commands;
+package me.gabij.multiplebedspawn.commands;
 
-import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
+import me.gabij.multiplebedspawn.MultipleBedSpawn;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 
-import static me.gabrielfj.multiplebedspawn.listeners.RemoveMenuHandler.openRemoveMenu;
+import static me.gabij.multiplebedspawn.listeners.RemoveMenuHandler.openRemoveMenu;
 
 import java.util.ArrayList;
 
 public class RemoveCommand extends BukkitCommand {
     static MultipleBedSpawn plugin;
-    
+
     public RemoveCommand(MultipleBedSpawn plugin, String name) {
         super(name);
         RemoveCommand.plugin = plugin;
@@ -19,7 +19,7 @@ public class RemoveCommand extends BukkitCommand {
         this.usageMessage = "/removebed";
         this.setAliases(new ArrayList<String>());
     }
-    
+
     @Override
     public boolean execute(CommandSender sender, String alias, String[] args) {
         if (sender instanceof Player) {

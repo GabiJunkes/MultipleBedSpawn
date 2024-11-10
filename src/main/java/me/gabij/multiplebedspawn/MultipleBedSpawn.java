@@ -1,9 +1,9 @@
-package me.gabrielfj.multiplebedspawn;
+package me.gabij.multiplebedspawn;
 
-import me.gabrielfj.multiplebedspawn.commands.NameCommand;
-import me.gabrielfj.multiplebedspawn.commands.RemoveCommand;
-import me.gabrielfj.multiplebedspawn.commands.ShareCommand;
-import me.gabrielfj.multiplebedspawn.listeners.*;
+import me.gabij.multiplebedspawn.commands.NameCommand;
+import me.gabij.multiplebedspawn.commands.RemoveCommand;
+import me.gabij.multiplebedspawn.commands.ShareCommand;
+import me.gabij.multiplebedspawn.listeners.*;
 
 import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.Configuration;
@@ -11,7 +11,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-
 
 public final class MultipleBedSpawn extends JavaPlugin {
 
@@ -33,8 +32,8 @@ public final class MultipleBedSpawn extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerGetsOnBedListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 
-        try{
-            CommandMap commandMap = me.gabrielfj.multiplebedspawn.utils.CommandMapUtil.getCommandMap();
+        try {
+            CommandMap commandMap = me.gabij.multiplebedspawn.utils.CommandMapUtil.getCommandMap();
             commandMap.register(this.getName(), new NameCommand(this, "renamebed"));
             if (this.getConfig().getBoolean("remove-beds-gui")) {
                 commandMap.register(this.getName(), new RemoveCommand(this, "removebed"));
@@ -43,13 +42,15 @@ public final class MultipleBedSpawn extends JavaPlugin {
                 commandMap.register(this.getName(), new ShareCommand(this, "sharebed"));
             }
             this.getLogger().info("Commands added successfully");
-        }catch(NoSuchFieldException | IllegalAccessException e){
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             this.getLogger().warning("Could not access commandMap. Commands will not work");
             this.getLogger().warning(e.getMessage());
         }
     }
 
-    public static MultipleBedSpawn getInstance() { return instance; }
+    public static MultipleBedSpawn getInstance() {
+        return instance;
+    }
 
     // get message of selected language
     public String getMessages(String path) {
@@ -60,9 +61,9 @@ public final class MultipleBedSpawn extends JavaPlugin {
         String lang = this.getConfig().getString("lang");
         InputStream input;
         try { // tries getting selected languages
-            input = getClass().getClassLoader().getResourceAsStream("languages/{key}.yml".replace("{key}",lang));
+            input = getClass().getClassLoader().getResourceAsStream("languages/{key}.yml".replace("{key}", lang));
             this.messages = YamlConfiguration.loadConfiguration(new InputStreamReader(input));
-        }catch (Exception e){ // else sets enUS as default
+        } catch (Exception e) { // else sets enUS as default
             input = getClass().getClassLoader().getResourceAsStream("languages/enUS.yml");
             this.messages = YamlConfiguration.loadConfiguration(new InputStreamReader(input));
         }

@@ -1,4 +1,4 @@
-package me.gabrielfj.multiplebedspawn.models;
+package me.gabij.multiplebedspawn.models;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,7 +16,7 @@ public class BedData implements Serializable {
     private String bedWorld;
     private long bedCooldown = 0;
 
-    public BedData(Block bed, Player p){
+    public BedData(Block bed, Player p) {
         this.bedMaterial = bed.getType();
         this.bedCoords = locationToString(bed.getLocation());
         this.bedSpawnCoords = locationToString(p.getLocation());
@@ -31,8 +31,8 @@ public class BedData implements Serializable {
         this.bedName = bedName;
     }
 
-    private String locationToString(Location loc){
-        return loc.getX()+":"+loc.getY()+":"+loc.getZ();
+    private String locationToString(Location loc) {
+        return loc.getX() + ":" + loc.getY() + ":" + loc.getZ();
     }
 
     public Material getBedMaterial() {
@@ -55,11 +55,11 @@ public class BedData implements Serializable {
         this.bedWorld = bedWorld;
     }
 
-    public long getBedCooldown(){
+    public long getBedCooldown() {
         return bedCooldown;
     }
 
-    public void setBedCooldown(long cooldown){
+    public void setBedCooldown(long cooldown) {
         this.bedCooldown = cooldown;
     }
 

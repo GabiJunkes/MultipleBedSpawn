@@ -1,9 +1,9 @@
-package me.gabrielfj.multiplebedspawn.listeners;
+package me.gabij.multiplebedspawn.listeners;
 
-import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
-import me.gabrielfj.multiplebedspawn.models.BedData;
-import me.gabrielfj.multiplebedspawn.models.BedsDataType;
-import me.gabrielfj.multiplebedspawn.models.PlayerBedsData;
+import me.gabij.multiplebedspawn.MultipleBedSpawn;
+import me.gabij.multiplebedspawn.models.BedData;
+import me.gabij.multiplebedspawn.models.BedsDataType;
+import me.gabij.multiplebedspawn.models.PlayerBedsData;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.removePlayerBed;
-import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.getPlayerBedsCount;
+import static me.gabij.multiplebedspawn.utils.BedsUtils.removePlayerBed;
+import static me.gabij.multiplebedspawn.utils.PlayerUtils.getPlayerBedsCount;
 
 public class RemoveMenuHandler implements Listener {
     static MultipleBedSpawn plugin;
@@ -30,7 +30,7 @@ public class RemoveMenuHandler implements Listener {
         RemoveMenuHandler.plugin = plugin;
     }
 
-    public static void openRemoveMenu(Player p){
+    public static void openRemoveMenu(Player p) {
 
         // gets how much beds player has to use on for loop and for the if check
         PersistentDataContainer playerData = p.getPersistentDataContainer();
@@ -43,11 +43,12 @@ public class RemoveMenuHandler implements Listener {
         }
 
         // if the player doesnt have any beds than dont open menu
-        if (playerBedsCount>0){
+        if (playerBedsCount > 0) {
 
             // create inventory
-            int bedCount = playerBedsCount+1;
-            Inventory gui = Bukkit.createInventory(p, 9 * ( (int) Math.ceil( bedCount / (Double) 9.0 ) ), ChatColor.translateAlternateColorCodes('&', plugin.getMessages("remove-menu-title")));
+            int bedCount = playerBedsCount + 1;
+            Inventory gui = Bukkit.createInventory(p, 9 * ((int) Math.ceil(bedCount / (Double) 9.0)),
+                    ChatColor.translateAlternateColorCodes('&', plugin.getMessages("remove-menu-title")));
 
             HashMap<String, BedData> beds = playerBedsData.getPlayerBedData();
             if (!plugin.getConfig().getBoolean("link-worlds")) {
@@ -60,13 +61,13 @@ public class RemoveMenuHandler implements Listener {
                 });
                 beds = bedsT;
             }
-            AtomicInteger cont= new AtomicInteger(1);
+            AtomicInteger cont = new AtomicInteger(1);
             beds.forEach((uuid, bed) -> {
-                ItemStack item = new ItemStack(bed.getBedMaterial(),1);
+                ItemStack item = new ItemStack(bed.getBedMaterial(), 1);
                 ItemMeta item_meta = item.getItemMeta();
                 String bedName = plugin.getMessages("default-bed-name").replace("{1}", cont.toString());
                 item_meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', bedName));
-                if (bed.getBedName()!=null) {
+                if (bed.getBedName() != null) {
                     item_meta.setDisplayName(bed.getBedName());
                 }
                 PersistentDataContainer data = item_meta.getPersistentDataContainer();
@@ -93,11 +94,11 @@ public class RemoveMenuHandler implements Listener {
                 cont.getAndIncrement();
             });
 
-            ItemStack item = new ItemStack(Material.BARRIER,1);
+            ItemStack item = new ItemStack(Material.BARRIER, 1);
             ItemMeta item_meta = item.getItemMeta();
-            item_meta.setDisplayName(ChatColor.YELLOW+plugin.getMessages("close-menu"));
+            item_meta.setDisplayName(ChatColor.YELLOW + plugin.getMessages("close-menu"));
             item.setItemMeta(item_meta);
-            gui.setItem(9 * ( (int) Math.ceil( bedCount / (Double) 9.0 )) -1, item);
+            gui.setItem(9 * ((int) Math.ceil(bedCount / (Double) 9.0)) - 1, item);
 
             // I dont know why but if openInventory is not on a scheduler is does not open
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -189,7 +190,6 @@ public class RemoveMenuHandler implements Listener {
                 item.setItemMeta(item_meta);
                 gui.setItem(9 * ((int) Math.ceil(bedCount / (Double) 9.0)) - 1, item);
 
-
             } else {
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     p.closeInventory();
@@ -202,21 +202,21 @@ public class RemoveMenuHandler implements Listener {
             }, 0L);
         }
     }
-    @EventHandler
-    public void onMenuClick(InventoryClickEvent e){
 
-        if (e.getView().getTitle().equalsIgnoreCase(plugin.getMessages("remove-menu-title"))){
+    @EventHandler
+    public void onMenuClick(InventoryClickEvent e) {
+
+        if (e.getView().getTitle().equalsIgnoreCase(plugin.getMessages("remove-menu-title"))) {
             e.setCancelled(true);
             Player p = (Player) e.getWhoClicked();
-            if (e.getCurrentItem() != null){
+            if (e.getCurrentItem() != null) {
                 PersistentDataContainer playerData = p.getPersistentDataContainer();
                 PlayerBedsData playerBedsData = null;
                 if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
                     playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
                 }
 
-
-                if (e.getCurrentItem().getType().toString().toLowerCase().contains("bed")){
+                if (e.getCurrentItem().getType().toString().toLowerCase().contains("bed")) {
 
                     ItemMeta item_meta = e.getCurrentItem().getItemMeta();
                     PersistentDataContainer data = item_meta.getPersistentDataContainer();

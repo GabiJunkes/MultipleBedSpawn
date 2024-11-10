@@ -1,4 +1,4 @@
-package me.gabrielfj.multiplebedspawn.utils;
+package me.gabij.multiplebedspawn.utils;
 
 import java.lang.reflect.Field;
 

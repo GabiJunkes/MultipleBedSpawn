@@ -1,11 +1,11 @@
-package me.gabrielfj.multiplebedspawn.commands;
+package me.gabij.multiplebedspawn.commands;
 
-import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
-import me.gabrielfj.multiplebedspawn.models.BedData;
-import me.gabrielfj.multiplebedspawn.models.BedsDataType;
-import me.gabrielfj.multiplebedspawn.models.PlayerBedsData;
+import me.gabij.multiplebedspawn.MultipleBedSpawn;
+import me.gabij.multiplebedspawn.models.BedData;
+import me.gabij.multiplebedspawn.models.BedsDataType;
+import me.gabij.multiplebedspawn.models.PlayerBedsData;
 
-import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.checkIfIsBed;
+import static me.gabij.multiplebedspawn.utils.BedsUtils.checkIfIsBed;
 
 import java.util.ArrayList;
 
@@ -20,10 +20,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-
-public class NameCommand extends BukkitCommand  {
+public class NameCommand extends BukkitCommand {
     static MultipleBedSpawn plugin;
-    
+
     public NameCommand(MultipleBedSpawn plugin, String name) {
         super(name);
         NameCommand.plugin = plugin;
@@ -34,20 +33,21 @@ public class NameCommand extends BukkitCommand  {
 
     @Override
     public boolean execute(CommandSender sender, String alias, String[] args) {
-        if (sender instanceof Player){
+        if (sender instanceof Player) {
             String name = "";
-            for (String arg : args){
-                name += arg+" ";
+            for (String arg : args) {
+                name += arg + " ";
             }
             Player p = (Player) sender;
             Block bed = checkIfIsBed(p.getTargetBlockExact(4));
-            if (bed!=null) {
+            if (bed != null) {
                 BlockState blockState = bed.getState();
                 String bedUUID = null;
-                if (blockState instanceof TileState tileState){ // sets a randomUUID to the bed if the bed doesnt have it or get the bed uuid
+                if (blockState instanceof TileState tileState) { // sets a randomUUID to the bed if the bed doesnt have
+                                                                 // it or get the bed uuid
                     PersistentDataContainer container = tileState.getPersistentDataContainer();
 
-                    if (container.has(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING)){
+                    if (container.has(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING)) {
                         bedUUID = container.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
                     }
 
@@ -55,7 +55,7 @@ public class NameCommand extends BukkitCommand  {
 
                 }
 
-                if (bedUUID==null){
+                if (bedUUID == null) {
                     p.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-registered-message"));
                     return false;
                 }
@@ -65,17 +65,19 @@ public class NameCommand extends BukkitCommand  {
 
                 if (playerData.has(new NamespacedKey(plugin, "beds"), new BedsDataType())) {
                     playerBedsData = playerData.get(new NamespacedKey(plugin, "beds"), new BedsDataType());
-                    if (playerBedsData!=null && playerBedsData.getPlayerBedData()!=null && playerBedsData.hasBed(bedUUID)){
+                    if (playerBedsData != null && playerBedsData.getPlayerBedData() != null
+                            && playerBedsData.hasBed(bedUUID)) {
                         BedData bedData = playerBedsData.getPlayerBedData().get(bedUUID);
                         bedData.setBedName(name);
                         playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-name-registered-successfully-message")));
-                    }else{
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                                plugin.getMessages("bed-name-registered-successfully-message")));
+                    } else {
                         p.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-registered-message"));
                         return false;
                     }
                 }
-            }else{
+            } else {
                 p.sendMessage(ChatColor.RED + plugin.getMessages("bed-not-found-message"));
                 return false;
             }

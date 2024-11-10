@@ -1,6 +1,6 @@
-package me.gabrielfj.multiplebedspawn.listeners;
+package me.gabij.multiplebedspawn.listeners;
 
-import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
+import me.gabij.multiplebedspawn.MultipleBedSpawn;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -10,8 +10,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.stringToLocation;
-import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.undoPropPlayer;
+import static me.gabij.multiplebedspawn.utils.PlayerUtils.stringToLocation;
+import static me.gabij.multiplebedspawn.utils.PlayerUtils.undoPropPlayer;
 
 public class PlayerJoinListener implements Listener {
     MultipleBedSpawn plugin;
@@ -21,7 +21,7 @@ public class PlayerJoinListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoinEvent(PlayerJoinEvent e){
+    public void onPlayerJoinEvent(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         PersistentDataContainer playerData = p.getPersistentDataContainer();
         NamespacedKey spawnLocName = new NamespacedKey(plugin, "spawnLoc");

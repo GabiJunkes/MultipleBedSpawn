@@ -1,4 +1,4 @@
-package me.gabrielfj.multiplebedspawn.models;
+package me.gabij.multiplebedspawn.models;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -14,12 +14,12 @@ public class PlayerBedsData implements Serializable {
     public PlayerBedsData() {
     }
 
-    public PlayerBedsData(Player p, Block bed, String bedUUID){
+    public PlayerBedsData(Player p, Block bed, String bedUUID) {
         BedData tempBedData = new BedData(bed, p);
         this.bedData.put(bedUUID, tempBedData);
     }
 
-    public void setNewBed(Player p, Block bed, String bedUUID){
+    public void setNewBed(Player p, Block bed, String bedUUID) {
         BedData tempBedData = new BedData(bed, p);
         this.bedData.put(bedUUID, tempBedData);
     }
@@ -29,15 +29,15 @@ public class PlayerBedsData implements Serializable {
         receiverPlayerBedsData.bedData.put(bedUUID, bedToShare);
     }
 
-    public void removeBed(String bedUUID){
+    public void removeBed(String bedUUID) {
         bedData.remove(bedUUID);
     }
 
-    public boolean hasBed(String bedUUID){
+    public boolean hasBed(String bedUUID) {
         return bedData.containsKey(bedUUID);
     }
 
-    public HashMap<String, BedData> getPlayerBedData(){
+    public HashMap<String, BedData> getPlayerBedData() {
         return bedData;
     }
 

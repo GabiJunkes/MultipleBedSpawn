@@ -1,8 +1,8 @@
-package me.gabrielfj.multiplebedspawn.listeners;
+package me.gabij.multiplebedspawn.listeners;
 
-import me.gabrielfj.multiplebedspawn.MultipleBedSpawn;
-import me.gabrielfj.multiplebedspawn.models.BedsDataType;
-import me.gabrielfj.multiplebedspawn.models.PlayerBedsData;
+import me.gabij.multiplebedspawn.MultipleBedSpawn;
+import me.gabij.multiplebedspawn.models.BedsDataType;
+import me.gabij.multiplebedspawn.models.PlayerBedsData;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -18,8 +18,8 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.List;
 import java.util.UUID;
 
-import static me.gabrielfj.multiplebedspawn.utils.BedsUtils.getMaxNumberOfBeds;
-import static me.gabrielfj.multiplebedspawn.utils.PlayerUtils.getPlayerBedsCount;
+import static me.gabij.multiplebedspawn.utils.BedsUtils.getMaxNumberOfBeds;
+import static me.gabij.multiplebedspawn.utils.PlayerUtils.getPlayerBedsCount;
 
 public class PlayerGetsOnBedListener implements Listener {
 
@@ -30,7 +30,7 @@ public class PlayerGetsOnBedListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerGetOnBed(PlayerBedEnterEvent e){
+    public void onPlayerGetOnBed(PlayerBedEnterEvent e) {
 
         Player player = e.getPlayer();
         String world = player.getWorld().getName();
@@ -55,15 +55,19 @@ public class PlayerGetsOnBedListener implements Listener {
 
                 UUID randomUUID = UUID.randomUUID();
                 BlockState blockState = bed.getState();
-                
-                if (blockState instanceof TileState tileState) { // sets a randomUUID to the bed if the bed doesnt have it or get the bed uuid
+
+                if (blockState instanceof TileState tileState) { // sets a randomUUID to the bed if the bed doesnt have
+                                                                 // it or get the bed uuid
                     PersistentDataContainer container = tileState.getPersistentDataContainer();
 
                     if (!container.has(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING)) {
                         container.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, "" + randomUUID);
                     } else {
-                        randomUUID = UUID.fromString(container.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING));
-                        if ((playerBedsData==null || (playerBedsData!=null && !playerBedsData.hasBed(randomUUID.toString()))) && plugin.getConfig().getBoolean("exclusive-bed")){
+                        randomUUID = UUID.fromString(
+                                container.get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING));
+                        if ((playerBedsData == null
+                                || (playerBedsData != null && !playerBedsData.hasBed(randomUUID.toString())))
+                                && plugin.getConfig().getBoolean("exclusive-bed")) {
                             player.sendMessage(ChatColor.RED + plugin.getMessages("bed-already-has-owner"));
                             return;
                         }
@@ -88,9 +92,9 @@ public class PlayerGetsOnBedListener implements Listener {
 
                 if (registerBed) {
                     playerData.set(new NamespacedKey(plugin, "beds"), new BedsDataType(), playerBedsData);
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessages("bed-registered-successfully-message")));
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            plugin.getMessages("bed-registered-successfully-message")));
                 }
-
 
             } else {
                 player.sendMessage(ChatColor.RED + plugin.getMessages("max-beds-message"));
@@ -99,6 +103,5 @@ public class PlayerGetsOnBedListener implements Listener {
             e.setCancelled(plugin.getConfig().getBoolean("disable-sleeping"));
         }
     }
-
 
 }
