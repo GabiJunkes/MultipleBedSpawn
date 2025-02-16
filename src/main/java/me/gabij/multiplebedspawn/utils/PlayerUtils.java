@@ -60,6 +60,7 @@ public class PlayerUtils {
 
         PersistentDataContainer playerData = p.getPersistentDataContainer();
         if (playerData.has(new NamespacedKey(plugin, "hasProp"), PersistentDataType.BOOLEAN)) {
+            playerData.remove(new NamespacedKey(plugin, "hasProp"));
 
             p.setInvulnerable(false);
             p.setInvisible(playerData.get(new NamespacedKey(plugin, "isInvisible"), PersistentDataType.BOOLEAN));
@@ -80,7 +81,6 @@ public class PlayerUtils {
                 playerData.remove(new NamespacedKey(plugin, "isFlying"));
             }
 
-            playerData.remove(new NamespacedKey(plugin, "hasProp"));
 
             p.closeInventory();
         }
