@@ -2,6 +2,7 @@ package me.gabij.multiplebedspawn;
 
 import me.gabij.multiplebedspawn.commands.NameCommand;
 import me.gabij.multiplebedspawn.commands.RemoveCommand;
+import me.gabij.multiplebedspawn.commands.RespawnMenuCommand;
 import me.gabij.multiplebedspawn.commands.ShareCommand;
 import me.gabij.multiplebedspawn.listeners.*;
 
@@ -34,6 +35,7 @@ public final class MultipleBedSpawn extends JavaPlugin {
 
         try {
             CommandMap commandMap = me.gabij.multiplebedspawn.utils.CommandMapUtil.getCommandMap();
+            commandMap.register(this.getName(), new RespawnMenuCommand(this, "respawnbed"));
             commandMap.register(this.getName(), new NameCommand(this, "renamebed"));
             if (this.getConfig().getBoolean("remove-beds-gui")) {
                 commandMap.register(this.getName(), new RemoveCommand(this, "removebed"));

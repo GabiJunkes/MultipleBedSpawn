@@ -37,7 +37,7 @@ public class PlayerRespawnListener implements Listener {
         World world = e.getRespawnLocation().getWorld();
         if (world.getEnvironment() == Environment.NETHER || world.getEnvironment() == Environment.THE_END)
             return;
-        if (e.getRespawnReason() != RespawnReason.DEATH)
+        if (e.getRespawnReason() == RespawnReason.PLUGIN)
             return;
         String worldName = world.getName();
         List<String> denylist = plugin.getConfig().getStringList("denylist");
