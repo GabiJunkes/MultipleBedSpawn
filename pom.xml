@@ -6,7 +6,7 @@
 
     <groupId>me.gabij</groupId>
     <artifactId>MultipleBedSpawn</artifactId>
-    <version>1.12</version>
+    <version>1.12.1</version>
     <packaging>jar</packaging>
 
     <name>MultipleBedSpawn</name>
